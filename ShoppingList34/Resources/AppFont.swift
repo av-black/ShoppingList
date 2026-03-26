@@ -12,7 +12,7 @@ enum AppFont {
     static let title1 = Font.system(size: 28, weight: .semibold)
     static let title2 = Font.system(size: 22, weight: .semibold)
     static let title3 = Font.system(size: 20, weight: .medium)
-
+    
     static let headline = Font.system(size: 17, weight: .medium)
     static let headlineStrong = Font.system(size: 17, weight: .semibold)
     
