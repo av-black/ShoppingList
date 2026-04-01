@@ -16,28 +16,28 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Список покупок" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dO5-kk-a0l">
+                                <rect key="frame" x="16" y="697.66666666666663" width="361" height="56.666666666666629"/>
+                                <fontDescription key="fontDescription" name="ChalkboardSE-Regular" family="Chalkboard SE" pointSize="40"/>
+                                <color key="textColor" name="TurquoiseUniversalSL"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchImage" translatesAutoresizingMaskIntoConstraints="NO" id="nAL-bh-DF8">
-                                <rect key="frame" x="16" y="254.66666666666663" width="343" height="343"/>
+                                <rect key="frame" x="25" y="254.66666666666663" width="343" height="343"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="343" id="Zdi-Vm-0xa"/>
                                     <constraint firstAttribute="width" constant="343" id="lFw-8O-Sgu"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Список покупок" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dO5-kk-a0l">
-                                <rect key="frame" x="16" y="710" width="361" height="74"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="ChalkboardSE-Regular" family="Chalkboard SE" pointSize="40"/>
-                                <color key="textColor" name="TurquoiseUniversalSL"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
                         <color key="backgroundColor" name="GrayMainBackgroundSL"/>
                         <constraints>
-                            <constraint firstItem="nAL-bh-DF8" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="4V4-jv-r9b"/>
-                            <constraint firstItem="nAL-bh-DF8" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="8IJ-Nt-im2"/>
-                            <constraint firstItem="nAL-bh-DF8" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" constant="16" id="Zde-Lv-mUd"/>
-                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="nAL-bh-DF8" secondAttribute="trailing" constant="16" id="gyI-4o-WMJ"/>
+                            <constraint firstItem="nAL-bh-DF8" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="JkH-tz-vGw"/>
+                            <constraint firstItem="dO5-kk-a0l" firstAttribute="top" secondItem="nAL-bh-DF8" secondAttribute="bottom" constant="100" id="OoW-Ta-xVP"/>
+                            <constraint firstItem="dO5-kk-a0l" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" constant="16" id="fya-B3-Tql"/>
+                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="dO5-kk-a0l" secondAttribute="trailing" constant="16" id="mRF-a0-mhO"/>
+                            <constraint firstItem="nAL-bh-DF8" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="qK0-MG-8bS"/>
                         </constraints>
                     </view>
                 </viewController>
