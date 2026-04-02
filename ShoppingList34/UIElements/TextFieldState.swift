@@ -11,3 +11,4 @@ enum TextFieldState: Equatable {
     case normal
     case error(String)
 }
+
