@@ -5,4 +5,23 @@
 //  Created by Smirnov Michael on 31.03.2026.
 //
 
-import Foundation
+import SwiftUI
+
+struct PrimaryButton: View {
+    let title: String
+    let isActive: Bool
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .font(.headline)
+                .foregroundColor(Color("GrayHintSL"))
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color("GrayButtonDisabledSL"))
+                .cornerRadius(100)
+        }
+        .disabled(!isActive)
+    }
+}

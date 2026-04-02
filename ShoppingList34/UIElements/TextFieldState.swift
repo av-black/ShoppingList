@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+enum TextFieldState: Equatable {
+    case normal
+    case error(String)
+}
