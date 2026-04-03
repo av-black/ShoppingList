@@ -15,22 +15,22 @@ struct ListViewCell: View {
             ZStack {
                 Circle()
                     .fill(listItem.designColor.color)
-                    .frame(width: 56, height: 56)
+                    .frame(width: 48, height: 48)
 
                 listItem.icon.image
                     .font(AppFont.title2)
             }
 
             Text(listItem.title)
-                .font(AppFont.title2)
+                .font(AppFont.title3)
                 .bold()
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             HStack(spacing: 2) {
                 Text("\(listItem.completedCount)/")
-                    .font(AppFont.title2)
+                    .font(AppFont.body)
                 Text("\(listItem.totalCount)")
-                    .font(AppFont.title2)
+                    .font(AppFont.headline)
                     .bold()
             }
         }
