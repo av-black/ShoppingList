@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CustomTextField: View {
+struct BaseTextField: View {
     let placeholder: String
     @Binding var text: String
     let state: TextFieldState
@@ -19,11 +19,9 @@ struct CustomTextField: View {
                     "",
                     text: $text,
                     prompt: Text(placeholder)
-                        .foregroundColor(Color("GrayHintSL"))
-                )
-                .font(.headline)
-                .foregroundColor(Color("GrayHintSL"))
-                .padding(.vertical, 14)
+                        .foregroundColor(.grayHintSL)                )
+                .font(AppFont.headline)
+                .foregroundColor(.grayHintSL)                .padding(.vertical, 14)
                 .padding(.leading, 16)
                 
                 if !text.isEmpty {
@@ -31,12 +29,11 @@ struct CustomTextField: View {
                         text = ""
                     } label: {
                         AppIcon.clear.image
-                            .foregroundColor(Color("GrayHintSL"))
-                    }
+                        .foregroundColor(.grayHintSL)                    }
                     .padding(.trailing, 12)
                 }
             }
-            .background(Color("GrayCardBackgroundSL"))
+            .background(.grayCardBackgroundSL)
             .cornerRadius(12)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
@@ -45,8 +42,8 @@ struct CustomTextField: View {
             
             if case let .error(message) = state {
                 Text(message)
-                    .font(.caption)
-                    .foregroundColor(.red)
+                    .font(AppFont.caption)
+                    .foregroundColor(.redSL)
             }
         }
     }
@@ -55,7 +52,7 @@ struct CustomTextField: View {
         case .normal:
             return .clear
         case .error:
-            return Color("RedSL")
+            return .redSL
         }
     }
 }
@@ -64,19 +61,19 @@ struct CustomTextField: View {
     @Previewable @State var filledText = "Тестовый текст"
     
     VStack(spacing: 16) {
-        CustomTextField(
+        BaseTextField(
             placeholder: "Введите текст",
             text: $text,
             state: .normal
         )
         
-        CustomTextField(
+        BaseTextField(
             placeholder: "Введите текст",
             text: $filledText,
             state: .normal
         )
         
-        CustomTextField(
+        BaseTextField(
             placeholder: "Введите текст",
             text: $text,
             state: .error("Это название уже используется, пожалуйста, измените его.")
