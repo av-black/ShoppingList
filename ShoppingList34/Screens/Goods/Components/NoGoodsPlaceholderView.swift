@@ -16,7 +16,7 @@ struct NoGoodsPlaceholderView: View {
 
             VStack(spacing: 4) {
                 Text("Давайте спланируем покупки!")
-                    .font(AppFont.headline)
+                    .font(AppFont.title3)
                     .bold()
 
                 Text("Начните добавлять товары")
