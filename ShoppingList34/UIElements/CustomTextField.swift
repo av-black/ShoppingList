@@ -36,8 +36,12 @@ struct CustomTextField: View {
                     .padding(.trailing, 12)
                 }
             }
-            .background(Color.white)
+            .background(Color("GrayCardBackgroundSL"))
             .cornerRadius(12)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(borderColor, lineWidth: 1)
+            )
             
             if case let .error(message) = state {
                 Text(message)
@@ -46,4 +50,38 @@ struct CustomTextField: View {
             }
         }
     }
+    private var borderColor: Color {
+        switch state {
+        case .normal:
+            return .clear
+        case .error:
+            return Color("RedSL")
+        }
+    }
+}
+#Preview {
+    @Previewable @State var text = ""
+    @Previewable @State var filledText = "Тестовый текст"
+    
+    VStack(spacing: 16) {
+        CustomTextField(
+            placeholder: "Введите текст",
+            text: $text,
+            state: .normal
+        )
+        
+        CustomTextField(
+            placeholder: "Введите текст",
+            text: $filledText,
+            state: .normal
+        )
+        
+        CustomTextField(
+            placeholder: "Введите текст",
+            text: $text,
+            state: .error("Это название уже используется, пожалуйста, измените его.")
+        )
+    }
+    .padding()
+    .background(Color(.systemGroupedBackground))
 }

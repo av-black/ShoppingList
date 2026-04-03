@@ -20,8 +20,17 @@ struct PrimaryButton: View {
                 .frame(maxWidth: .infinity)
                 .padding()
                 .background(Color("GrayButtonDisabledSL"))
-                .cornerRadius(100)
+                .clipShape(Capsule())
         }
         .disabled(!isActive)
     }
+}
+
+#Preview {
+    PrimaryButton(
+        title: "Нажми на меня",
+        isActive: true,
+        action: {}
+    )
+    .padding()
 }
