@@ -18,19 +18,19 @@ struct ListViewCell: View {
                     .frame(width: 56, height: 56)
 
                 listItem.icon.image
-                    .font(.title2)
+                    .font(AppFont.title2)
             }
 
             Text(listItem.title)
-                .font(.title2)
+                .font(AppFont.title2)
                 .bold()
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             HStack(spacing: 2) {
                 Text("\(listItem.completedCount)/")
-                    .font(.title2)
+                    .font(AppFont.title2)
                 Text("\(listItem.totalCount)")
-                    .font(.title2)
+                    .font(AppFont.title2)
                     .bold()
             }
         }
