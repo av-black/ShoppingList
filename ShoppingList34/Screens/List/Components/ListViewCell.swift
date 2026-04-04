@@ -19,20 +19,21 @@ struct ListViewCell: View {
 
                 listItem.icon.image
                     .font(AppFont.title2)
+                    .foregroundColor(.blackUniversalSL)
             }
 
             Text(listItem.title)
                 .font(AppFont.title3)
-                .bold()
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .foregroundColor(.blackTextSL)
 
             HStack(spacing: 2) {
                 Text("\(listItem.completedCount)/")
                     .font(AppFont.body)
                 Text("\(listItem.totalCount)")
                     .font(AppFont.headline)
-                    .bold()
             }
+            .foregroundColor(.blackTextSL)
         }
         .padding(16)
         .background(.grayCardBackgroundSL)
