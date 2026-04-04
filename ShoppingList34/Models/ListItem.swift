@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct ListItem {
+struct ListItem: Identifiable {
+    let id: UUID
     var title: String
     var designColor: ListColor
     var icon: AppIcon
@@ -22,11 +23,13 @@ struct ListItem {
     var statusText: String { "\(completedCount)/\(totalCount)" }
     
     init(
+        id: UUID = UUID(),
         title: String,
         designColor: ListColor = .blue,
         icon: AppIcon,
         goods: [Goods] = []
     ) {
+        self.id = id
         self.title = title
         self.designColor = designColor
         self.icon = icon
