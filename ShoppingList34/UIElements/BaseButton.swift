@@ -34,7 +34,7 @@ struct BaseButton: View {
     private var textColor: Color {
         isActive
         ? .whiteUniversalSL
-        : .grayHintSL
+        : .grayHintUniversalSL
     }
 }
 

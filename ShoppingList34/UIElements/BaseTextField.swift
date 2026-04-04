@@ -19,9 +19,9 @@ struct BaseTextField: View {
                     "",
                     text: $text,
                     prompt: Text(placeholder)
-                        .foregroundColor(.grayHintSL)                )
-                .font(AppFont.headline)
-                .foregroundColor(.grayHintSL)                .padding(.vertical, 14)
+                        .foregroundColor(.grayHintUniversalSL)                )
+                .font(AppFont.body)
+                .foregroundColor(.blackTextSL)                .padding(.vertical, 14)
                 .padding(.leading, 16)
                 
                 if !text.isEmpty {
@@ -29,7 +29,7 @@ struct BaseTextField: View {
                         text = ""
                     } label: {
                         AppIcon.clear.image
-                        .foregroundColor(.grayHintSL)                    }
+                        .foregroundColor(.blackTextSL)                    }
                     .padding(.trailing, 12)
                 }
             }
@@ -37,7 +37,7 @@ struct BaseTextField: View {
             .cornerRadius(12)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(borderColor, lineWidth: 1)
+                    .stroke(borderColor, lineWidth: 0.5)
             )
             
             if case let .error(message) = state {
