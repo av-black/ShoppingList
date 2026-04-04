@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Goods: Identifiable {
+struct ShoppingItem: Identifiable {
     let id: UUID
     var title: String
     var amount: Double
