@@ -13,6 +13,7 @@ struct NoListsPlaceholderView: View {
             AppIcon.mainEmptyState.image
                 .resizable()
                 .scaledToFit()
+                .frame(maxWidth: 277)
 
             VStack(spacing: 4) {
                 Text("Давайте спланируем покупки!")
