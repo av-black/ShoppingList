@@ -35,7 +35,7 @@ struct ListViewCell: View {
             }
         }
         .padding(16)
-        .background(Color.white)
+        .background(.grayCardBackgroundSL)
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }
