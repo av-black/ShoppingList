@@ -9,12 +9,13 @@ import SwiftUI
 
 struct ColorSelectorView: View {
     @Binding var selectedColor: ListColor
+    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
         VStack(alignment: .leading, spacing: Constants.verticalSpacing) {
             Text(Constants.title)
                 .font(.system(size: Constants.titleFontSize))
-                .foregroundStyle(Constants.titleColor)
+                .foregroundStyle(titleColor)
 
             HStack(spacing: Constants.itemSpacing) {
                 ForEach(ListColor.allCases) { colorItem in
@@ -41,16 +42,30 @@ struct ColorSelectorView: View {
                                     height: Constants.circleSize
                                 )
                         }
+                        .frame(
+                            width: Constants.selectionSize,
+                            height: Constants.selectionSize
+                        )
                     }
                     .buttonStyle(.plain)
                 }
             }
         }
-        .padding(Constants.containerPadding)
-        .background(Constants.backgroundColor)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, Constants.horizontalPadding)
+        .padding(.vertical, Constants.verticalPadding)
+        .background(backgroundColor)
         .clipShape(
             RoundedRectangle(cornerRadius: Constants.cornerRadius)
         )
+    }
+
+    private var backgroundColor: Color {
+        colorScheme == .dark ? Color.grayCardBackgroundSL : .white
+    }
+
+    private var titleColor: Color {
+        colorScheme == .dark ? Color.whiteGrayTextSL : .black
     }
 }
 
@@ -59,19 +74,16 @@ private extension ColorSelectorView {
         static let title = "Выберите цвет"
 
         static let titleFontSize: CGFloat = 16
-        static let titleColor = Color.whiteGrayTextSL
-
         static let verticalSpacing: CGFloat = 12
-        static let itemSpacing: CGFloat = 16
+        static let itemSpacing: CGFloat = 12
 
         static let circleSize: CGFloat = 48
         static let selectionSize: CGFloat = 60
         static let selectionLineWidth: CGFloat = 3
 
-        static let containerPadding: CGFloat = 12
-        static let cornerRadius: CGFloat = 12
-
-        static let backgroundColor = Color.grayFieldBackgroundSL
+        static let horizontalPadding: CGFloat = 16
+        static let verticalPadding: CGFloat = 16
+        static let cornerRadius: CGFloat = 20
 
         static let selectionColor = Color.turquoiseUniversalSL
     }
