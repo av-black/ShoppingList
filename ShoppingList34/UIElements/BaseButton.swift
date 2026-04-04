@@ -16,7 +16,7 @@ struct BaseButton: View {
         Button(action: action) {
             Text(title)
                 .font(AppFont.headline)
-                .foregroundColor(textColor)
+                .foregroundStyle(textColor)
                 .frame(maxWidth: .infinity)
                 .padding()
                 .background(backgroundColor)
