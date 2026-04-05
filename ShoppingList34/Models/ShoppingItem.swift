@@ -28,3 +28,25 @@ struct ShoppingItem: Identifiable {
         self.isComplete = isComplete
     }
 }
+
+// MARK: - Mock
+
+extension ShoppingItem {
+    static var mock: ShoppingItem {
+        ShoppingItem(
+            title: "Молоко",
+            amount: 2,
+            type: .liter,
+            isComplete: false
+        )
+    }
+    
+    static var completedMock: ShoppingItem {
+        ShoppingItem(
+            title: "Чайник",
+            amount: 2,
+            type: .piece,
+            isComplete: true
+        )
+    }
+}
