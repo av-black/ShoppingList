@@ -9,24 +9,30 @@ import SwiftUI
 
 struct NoGoodsPlaceholderView: View {
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 28) {
             AppIcon.itemsEmptyState.image
                 .resizable()
                 .scaledToFit()
                 .frame(maxWidth: 277)
 
             VStack(spacing: 4) {
-                Text("Давайте спланируем покупки!")
+                Text(Constants.title)
                     .font(AppFont.title3)
-                    .bold()
 
-                Text("Начните добавлять товары")
+                Text(Constants.subtitle)
                     .font(AppFont.body)
-                    .foregroundStyle(.secondary)
             }
+            .foregroundColor(.blackTextSL)
         }
         .multilineTextAlignment(.center)
         .padding()
+    }
+}
+
+private extension NoGoodsPlaceholderView {
+    enum Constants {
+        static let title = "Давайте спланируем покупки!"
+        static let subtitle = "Начните добавлять товары"
     }
 }
 

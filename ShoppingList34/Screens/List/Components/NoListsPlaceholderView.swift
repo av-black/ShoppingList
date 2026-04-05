@@ -9,24 +9,30 @@ import SwiftUI
 
 struct NoListsPlaceholderView: View {
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 28) {
             AppIcon.mainEmptyState.image
                 .resizable()
                 .scaledToFit()
                 .frame(maxWidth: 277)
 
             VStack(spacing: 4) {
-                Text("Давайте спланируем покупки!")
+                Text(Constants.title)
                     .font(AppFont.title3)
-                    .bold()
 
-                Text("Создайте свой первый список")
+                Text(Constants.subtitle)
                     .font(AppFont.body)
-                    .foregroundStyle(.secondary)
             }
+            .foregroundColor(.blackTextSL)
         }
         .multilineTextAlignment(.center)
         .padding()
+    }
+}
+
+private extension NoListsPlaceholderView {
+    enum Constants {
+        static let title = "Давайте спланируем покупки!"
+        static let subtitle = "Создайте свой первый список"
     }
 }
 
