@@ -61,11 +61,11 @@ struct ColorSelectorView: View {
     }
 
     private var backgroundColor: Color {
-        colorScheme == .dark ? Color.grayCardBackgroundSL : .white
+        Color.grayCardBackgroundSL
     }
 
     private var titleColor: Color {
-        colorScheme == .dark ? Color.whiteGrayTextSL : .black
+        Color.blackTextSL
     }
 }
 
