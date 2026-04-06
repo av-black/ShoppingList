@@ -21,24 +21,36 @@ struct WelcomeView: View {
             Spacer()
 
             BaseButton(
-                title: "Начать",
+                title: Constants.buttonTitle,
                 isActive: true,
                 action: onStart
             )
             .padding(.horizontal, 16)
-            .padding(.bottom, 24)
+            .padding(.bottom, 20)
         }
-        .background(Color.grayMainBackgroundSL)
+        .background(.grayMainBackgroundSL)
     }
 }
- 
+
+// MARK: - Constants
+
+private extension WelcomeView {
+    enum Constants {
+        static let title = "Добро пожаловать!"
+        static let headline = "Никогда не забывайте,\nчто нужно купить"
+        static let subtitle = "Создавайте списки\nи не переживайте о покупках"
+        static let buttonTitle = "Начать"
+        static let illustrationMaxWidth: CGFloat = 277
+    }
+}
+
 // MARK: - Subviews
- 
+
 private extension WelcomeView {
     var titleSection: some View {
-        Text("Добро пожаловать!")
+        Text(Constants.title)
             .font(AppFont.largeTitle)
-            .foregroundStyle(.blackTextSL)
+            .foregroundStyle(.blackTitleSL)
             .multilineTextAlignment(.center)
             .padding(.horizontal, 16)
     }
@@ -47,21 +59,19 @@ private extension WelcomeView {
         AppIcon.onboardingMain.image
             .resizable()
             .scaledToFit()
-            .frame(maxWidth: 280)
+            .frame(maxWidth: Constants.illustrationMaxWidth)
             .padding(.vertical, 48)
             .accessibilityHidden(true)
     }
 
     var descriptionSection: some View {
         VStack(spacing: 12) {
-            Text("Никогда не забывайте,\nчто нужно купить")
+            Text(Constants.headline)
                 .font(AppFont.title2)
-                .bold()
                 .multilineTextAlignment(.center)
 
-            Text("Создавайте списки\nи не переживайте о покупках")
+            Text(Constants.subtitle)
                 .font(AppFont.body)
-                .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
         }
         .foregroundStyle(.blackTextSL)
