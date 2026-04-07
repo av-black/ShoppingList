@@ -13,13 +13,10 @@ struct ShoppingItemViewCell: View {
     
     var body: some View {
         HStack(spacing: 8) {
-            Button(
-                action: onCheckboxTap,
-                label: {
-                    checkboxView
-                        .frame(width: 44, height: 44)
-                }
-            )
+            Button(action: onCheckboxTap) {
+                checkboxView
+                    .frame(width: 44, height: 44)
+            }
             .buttonStyle(.plain)
             
             HStack {
@@ -48,19 +45,18 @@ struct ShoppingItemViewCell: View {
                 ZStack {
                     AppIcon.checkboxFill.image
                         .font(AppFont.checkbox)
-                        .foregroundColor(.turquoiseUniversalSL)
+                        .foregroundStyle(.turquoiseUniversalSL)
                     
                     AppIcon.checkmark.image
                         .font(AppFont.checkboxMark)
-                        .foregroundColor(.whiteUniversalSL)
+                        .foregroundStyle(.whiteUniversalSL)
                 }
             } else {
                 AppIcon.checkbox.image
                     .font(AppFont.checkbox)
-                    .foregroundColor(.grayCheckboxSL)
+                    .foregroundStyle(.grayCheckboxSL)
             }
         }
-        
     }
     
     private var textColor: Color {
@@ -76,7 +72,7 @@ struct ShoppingItemViewCell: View {
                     shoppingItem: item,
                     onCheckboxTap: {}
                 )
-
+                
                 Divider()
                     .background(Color.graySeparatorSL)
             }
