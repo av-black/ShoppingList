@@ -1,5 +1,5 @@
 //
-//  ProductFormView.swift
+//  ShoppingItemFormView.swift
 //  ShoppingList34
 //
 //  Created by МAK on 07.04.2026.
@@ -7,10 +7,8 @@
 
 import SwiftUI
  
-struct ProductFormView: View {
-
+struct ShoppingItemFormView: View {
     @Environment(\.dismiss) private var dismiss
-
     var isEditing: Bool = false
     var onSave: (String, String, MeasurementType) -> Void
  
@@ -19,8 +17,7 @@ struct ProductFormView: View {
     @State private var name = ""
     @State private var amount = ""
     @State private var selectedUnit: MeasurementType = .piece
-    @State private var nameFieldState: TextFieldState = .normal
-
+    
     private var isDoneButtonActive: Bool {
         !name.trimmingCharacters(in: .whitespaces).isEmpty && !amount.isEmpty
     }
@@ -29,7 +26,7 @@ struct ProductFormView: View {
  
     var body: some View {
         NavigationStack {
-            VStack(spacing: 16) {
+            VStack(spacing: 20) {
                 nameField
                 amountRow
                 Spacer()
@@ -59,36 +56,33 @@ struct ProductFormView: View {
 }
  
 // MARK: - Подвью
-
-private extension ProductFormView {
+ 
+private extension ShoppingItemFormView {
  
     var nameField: some View {
         BaseTextField(
             placeholder: Constants.namePlaceholder,
             text: $name,
-            state: nameFieldState
+            state: .normal
         )
     }
-
+ 
     var amountRow: some View {
         HStack(spacing: 16) {
             amountField
             unitPicker
         }
     }
-
+ 
     var amountField: some View {
         TextField(Constants.amountPlaceholder, text: $amount)
             .font(AppFont.body)
+            .foregroundStyle(.grayHintUniversalSL)
             .keyboardType(.decimalPad)
             .padding(.horizontal, 16)
             .padding(.vertical, 14)
-            .background(.whiteUniversalSL)
+            .background(.grayCardBackgroundSL)
             .clipShape(RoundedRectangle(cornerRadius: 12))
-            .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(.grayHintUniversalSL, lineWidth: 0.5)
-            )
     }
  
     var unitPicker: some View {
@@ -107,16 +101,12 @@ private extension ProductFormView {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 8)
-        .background(.whiteUniversalSL)
+        .background(.grayCardBackgroundSL)
         .clipShape(RoundedRectangle(cornerRadius: 12))
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(.grayHintUniversalSL, lineWidth: 0.5)
-        )
     }
 }
 
-private extension ProductFormView {
+private extension ShoppingItemFormView {
     enum Constants {
         static let createTitle = "Создание товара"
         static let editTitle = "Редактировать"
@@ -131,13 +121,13 @@ private extension ProductFormView {
 // MARK: - Preview
  
 #Preview("Создание") {
-    ProductFormView(isEditing: false) { name, amount, unit in
+    ShoppingItemFormView(isEditing: false) { name, amount, unit in
         print("Создано: \(name), \(amount) \(unit.rawValue)")
     }
 }
  
 #Preview("Редактирование") {
-    ProductFormView(isEditing: true) { name, amount, unit in
+    ShoppingItemFormView(isEditing: true) { name, amount, unit in
         print("Изменено: \(name), \(amount) \(unit.rawValue)")
     }
 }
