@@ -15,7 +15,11 @@ struct MoreButton: View {
             AppIcon.more.image
                 .font(AppFont.title2)
                 .foregroundStyle(.blackTextSL)
+                .frame(width: 44, height: 44)
+                .background(Color.clear)
+                .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
     }
 }
 
