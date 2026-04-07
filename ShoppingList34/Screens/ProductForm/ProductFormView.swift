@@ -8,15 +8,6 @@
 import SwiftUI
  
 struct ProductFormView: View {
-    enum Constants {
-        static let createTitle = "Создание товара"
-        static let editTitle = "Редактировать"
-        static let cancelButton = "Отменить"
-        static let doneButton = "Готово"
-        static let namePlaceholder = "Название списка"
-        static let amountPlaceholder = "Количество"
-        static let unitLabel = "Ед.изм.:"
-    }
 
     @Environment(\.dismiss) private var dismiss
 
@@ -122,6 +113,18 @@ private extension ProductFormView {
             RoundedRectangle(cornerRadius: 12)
                 .stroke(.grayHintUniversalSL, lineWidth: 0.5)
         )
+    }
+}
+
+private extension ProductFormView {
+    enum Constants {
+        static let createTitle = "Создание товара"
+        static let editTitle = "Редактировать"
+        static let cancelButton = "Отменить"
+        static let doneButton = "Готово"
+        static let namePlaceholder = "Название списка"
+        static let amountPlaceholder = "Количество"
+        static let unitLabel = "Ед.изм.:"
     }
 }
  
