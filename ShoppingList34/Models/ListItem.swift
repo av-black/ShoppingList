@@ -113,7 +113,6 @@ extension ListItem {
         )
     }
     
-    /// Моковый массив всех списков
     static var mocks: [ListItem] {
         [mock, catMock, partyMock]
     }
