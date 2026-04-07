@@ -1,5 +1,5 @@
 //
-//  NoGoodsPlaceholderView.swift
+//  NoShoppingItemsPlaceholderView.swift
 //  ShoppingList34
 //
 //  Created by Anton Silenin on 03.04.2026.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct NoGoodsPlaceholderView: View {
+struct NoShoppingItemsPlaceholderView: View {
     var body: some View {
         VStack(spacing: 28) {
             AppIcon.itemsEmptyState.image
@@ -29,7 +29,7 @@ struct NoGoodsPlaceholderView: View {
     }
 }
 
-private extension NoGoodsPlaceholderView {
+private extension NoShoppingItemsPlaceholderView {
     enum Constants {
         static let title = "Давайте спланируем покупки!"
         static let subtitle = "Начните добавлять товары"
@@ -37,5 +37,5 @@ private extension NoGoodsPlaceholderView {
 }
 
 #Preview {
-    NoGoodsPlaceholderView()
+    NoShoppingItemsPlaceholderView()
 }
