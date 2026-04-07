@@ -68,4 +68,53 @@ extension ListItem {
             ]
         )
     }
+    
+    static var catMock: ListItem {
+        ListItem(
+            title: "Кошке",
+            designColor: .green,
+            icon: .paw,
+            shoppingItem: [
+                ShoppingItem(title: "Корм сухой", amount: 1, type: .kilogram),
+                ShoppingItem(title: "Наполнитель", amount: 2, type: .piece),
+                ShoppingItem(title: "Игрушка", amount: 1, type: .piece),
+                ShoppingItem(title: "Витамины", amount: 1, type: .piece, isComplete: true)
+            ]
+        )
+    }
+    
+    static var partyMock: ListItem {
+        ListItem(
+            title: "Вечеринка малого",
+            designColor: .yellow,
+            icon: .gamepad,
+            shoppingItem: [
+                ShoppingItem(title: "Чипсы", amount: 3, type: .piece),
+                ShoppingItem(title: "Газировка", amount: 5, type: .piece),
+                ShoppingItem(title: "Пицца", amount: 2, type: .piece),
+                ShoppingItem(title: "Конфеты", amount: 1, type: .kilogram),
+                ShoppingItem(title: "Сок", amount: 3, type: .liter),
+                ShoppingItem(title: "Орехи", amount: 200, type: .gram),
+                ShoppingItem(title: "Печенье", amount: 300, type: .gram),
+                ShoppingItem(title: "Мороженое", amount: 4, type: .piece),
+                ShoppingItem(title: "Торт", amount: 1, type: .piece),
+                ShoppingItem(title: "Шарики", amount: 10, type: .piece),
+                ShoppingItem(title: "Свечи", amount: 1, type: .piece, isComplete: true),
+                ShoppingItem(title: "Скатерть", amount: 1, type: .piece, isComplete: true),
+                ShoppingItem(title: "Тарелки", amount: 10, type: .piece, isComplete: true),
+                ShoppingItem(title: "Стаканы", amount: 10, type: .piece, isComplete: true),
+                ShoppingItem(title: "Вилки", amount: 10, type: .piece, isComplete: true),
+                ShoppingItem(title: "Салфетки", amount: 2, type: .piece, isComplete: true),
+                ShoppingItem(title: "Фольга", amount: 1, type: .piece, isComplete: true),
+                ShoppingItem(title: "Пакеты", amount: 5, type: .piece, isComplete: true),
+                ShoppingItem(title: "Зубочистки", amount: 1, type: .piece, isComplete: true),
+                ShoppingItem(title: "Открытка", amount: 1, type: .piece, isComplete: true)
+            ]
+        )
+    }
+    
+    /// Моковый массив всех списков
+    static var mocks: [ListItem] {
+        [mock, catMock, partyMock]
+    }
 }
