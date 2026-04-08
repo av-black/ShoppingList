@@ -59,8 +59,10 @@ private extension ListView {
             }
         }
         .listStyle(.plain)
-        .padding(.bottom, 80)
         .scrollContentBackground(.hidden)
+        .safeAreaInset(edge: .bottom) {
+            Color.clear.frame(height: 80)
+        }
     }
 
     var createButton: some View {
@@ -70,7 +72,7 @@ private extension ListView {
             action: onCreateTap
         )
         .padding(.horizontal, 16)
-        .padding(.bottom, 20)
+        .padding(.vertical, 20)
     }
 }
 
