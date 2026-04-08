@@ -36,6 +36,7 @@ extension AppIcon {
     static let checkmark = AppIcon.system("checkmark")
     static let selector = AppIcon.system("chevron.up.chevron.down")
     static let checkbox = AppIcon.system("square")
+    static let checkboxFill = AppIcon.system("square.fill")
     static let checkboxSelected = AppIcon.system("checkmark.square.fill")
     static let share = AppIcon.system("square.and.arrow.up")
     static let reset = AppIcon.system("arrow.trianglehead.2.clockwise.rotate.90")

@@ -20,4 +20,7 @@ enum AppFont {
     static let body = Font.system(size: 17, weight: .regular)
     
     static let caption = Font.system(size: 13, weight: .regular)
+    
+    static let checkbox = Font.system(size: 22, weight: .regular)
+    static let checkboxMark = Font.system(size: 11, weight: .bold)
 }

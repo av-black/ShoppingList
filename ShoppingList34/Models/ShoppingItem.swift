@@ -13,7 +13,13 @@ struct ShoppingItem: Identifiable {
     var amount: Double
     var type: MeasurementType
     var isComplete: Bool
-
+    
+    // MARK: - Вычисляемые свойства
+    
+    var formattedAmount: String {
+        amount.formatted()
+    }
+    
     init(
         id: UUID = UUID(),
         title: String,
