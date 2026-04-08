@@ -68,8 +68,17 @@ struct PreviewWrapper: View {
     }
 }
 
-#Preview {
+#Preview("Light") {
     PreviewWrapper()
         .padding()
         .background(Color(.systemGroupedBackground))
+        .preferredColorScheme(.light)
 }
+
+#Preview("Dark") {
+    PreviewWrapper()
+        .padding()
+        .background(Color(.systemGroupedBackground))
+        .preferredColorScheme(.dark)
+}
+
