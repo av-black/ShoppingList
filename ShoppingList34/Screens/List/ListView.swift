@@ -55,7 +55,7 @@ private extension ListView {
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)
                     .padding(.horizontal, 16)
-                    .padding(.vertical, 4)
+                    .padding(.vertical, 6)
             }
         }
         .listStyle(.plain)

@@ -13,7 +13,7 @@ struct MoreButton: View {
     var body: some View {
         Button(action: action) {
             AppIcon.more.image
-                .font(AppFont.title2)
+                .font(AppFont.title3)
                 .foregroundStyle(.blackTextSL)
                 .frame(width: 44, height: 44)
                 .background(Color.clear)
