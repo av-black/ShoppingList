@@ -33,6 +33,8 @@ struct ShoppingItemsView: View {
     }
 }
 
+// MARK: - Subviews
+
 private extension ShoppingItemsView {
     
     // MARK: - Navigation Bar
@@ -65,11 +67,11 @@ private extension ShoppingItemsView {
             .foregroundStyle(.blackTitleSL)
     }
     
-//    var moreButton: some View {
-//        MoreButton(
-//            action: {}
-//        )
-//    }
+    //    var moreButton: some View {
+    //        MoreButton(
+    //            action: {}
+    //        )
+    //    }
     
     // MARK: - Search
     
