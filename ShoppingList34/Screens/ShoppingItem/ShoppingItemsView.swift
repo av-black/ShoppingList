@@ -44,7 +44,7 @@ private extension ShoppingItemsView {
             backButton
             titleView
             Spacer()
-            // moreButton
+            moreButton
         }
         .padding(.vertical, 11)
         .padding(.horizontal, 16)
@@ -67,11 +67,11 @@ private extension ShoppingItemsView {
             .foregroundStyle(.blackTitleSL)
     }
     
-    //    var moreButton: some View {
-    //        MoreButton(
-    //            action: {}
-    //        )
-    //    }
+    var moreButton: some View {
+        MoreButton(
+            action: {}
+        )
+    }
     
     // MARK: - Search
     
