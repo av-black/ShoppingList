@@ -10,11 +10,15 @@ import SwiftUI
 @Observable
 final class AppState {
     var hasLaunchedBefore: Bool {
-        get { UserDefaults.standard.bool(forKey: Keys.hasLaunchedBefore) }
-        set { UserDefaults.standard.set(newValue, forKey: Keys.hasLaunchedBefore) }
+        didSet {
+            UserDefaults.standard.set(hasLaunchedBefore, forKey: Keys.hasLaunchedBefore)
+        }
     }
 
-    /// Вызывается при нажатии "Начать" на WelcomeView
+    init() {
+        hasLaunchedBefore = UserDefaults.standard.bool(forKey: Keys.hasLaunchedBefore)
+    }
+
     func completeOnboarding() {
         hasLaunchedBefore = true
     }
