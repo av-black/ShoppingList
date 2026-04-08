@@ -22,9 +22,13 @@ struct ShoppingItemsView: View {
                     .padding(.top, 4)
                     .padding(.horizontal, 16)
                     .padding(.bottom, 16)
-                itemsList
+                
+                if shoppingItems.isEmpty {
+                    emptyState
+                } else {
+                    itemsList
+                }
             }
-            
             addItemButton
         }
         .background(.grayMainBackgroundSL)
@@ -36,40 +40,15 @@ struct ShoppingItemsView: View {
 // MARK: - Subviews
 
 private extension ShoppingItemsView {
-    
     // MARK: - Navigation Bar
     
     var navigationBar: some View {
-        HStack(spacing: 8) {
-            backButton
-            titleView
-            Spacer()
-            moreButton
-        }
-        .padding(.vertical, 11)
-        .padding(.horizontal, 16)
-    }
-    
-    var backButton: some View {
-        Button {
-            dismiss()
-        } label: {
-            AppIcon.back.image
-                .foregroundStyle(.blackIconSL)
-                .font(AppFont.sectionTitle)
-                .frame(width: 28, height: 28)
-        }
-    }
-    
-    var titleView: some View {
-        Text(title)
-            .font(AppFont.headline)
-            .foregroundStyle(.blackTitleSL)
-    }
-    
-    var moreButton: some View {
-        MoreButton(
-            action: {}
+        CustomNavigationBar(
+            title: title,
+            onBackTap: {
+                dismiss()
+            },
+            onMoreTap: {}
         )
     }
     
@@ -112,8 +91,6 @@ private extension ShoppingItemsView {
         .listStyle(.plain)
     }
     
-    // MARK: - Rows
-    
     private func shoppingItemRow(for item: ShoppingItem) -> some View {
         VStack(spacing: 0) {
             ShoppingItemViewCell(
@@ -130,6 +107,13 @@ private extension ShoppingItemsView {
             deleteSwipeAction
             editSwipeAction
         }
+    }
+    
+    // MARK: - Empty State
+    
+    var emptyState: some View {
+        NoShoppingItemsPlaceholderView()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
     // MARK: - Swipe Actions
@@ -178,11 +162,20 @@ private extension ShoppingItemsView {
     }
 }
 
-#Preview {
+#Preview("С данными") {
     NavigationStack {
         ShoppingItemsView(
             title: ListItem.mock.title,
             shoppingItems: ListItem.mock.shoppingItem
+        )
+    }
+}
+
+#Preview("Пустой") {
+    NavigationStack {
+        ShoppingItemsView(
+            title: ListItem.mock.title,
+            shoppingItems: []
         )
     }
 }
