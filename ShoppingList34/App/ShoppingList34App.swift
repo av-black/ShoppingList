@@ -9,9 +9,15 @@ import SwiftUI
 
 @main
 struct ShoppingList34App: App {
+    @State private var appState = AppState()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if appState.hasLaunchedBefore {
+                ContentView()
+            } else {
+                WelcomeView(onStart: appState.completeOnboarding)
+            }
         }
     }
 }
