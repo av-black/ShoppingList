@@ -62,7 +62,7 @@ struct ColorSelectorView: View {
 
 private extension ColorSelectorView {
     enum Constants {
-        static let title = "Выберите цвет"
+        static let title = "Цвет"
 
         static let verticalSpacing: CGFloat = 12
         static let itemSpacing: CGFloat = 12
@@ -79,4 +79,20 @@ private extension ColorSelectorView {
     }
 }
 
+#Preview("Light") {
+    @Previewable @State var selectedColor: ListColor = .green
+    
+    ColorSelectorView(selectedColor: $selectedColor)
+        .padding()
+        .background(Color(.grayMainBackgroundSL))
+        .environment(\.colorScheme, .light)
+}
 
+#Preview("Dark") {
+    @Previewable @State var selectedColor: ListColor = .green
+    
+    ColorSelectorView(selectedColor: $selectedColor)
+        .padding()
+        .background(.grayMainBackgroundSL)
+        .environment(\.colorScheme, .dark)
+}
