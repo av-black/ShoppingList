@@ -14,17 +14,16 @@ struct CategoryPickerView: View {
     let selectedColor: Color
     
     private let columns = Array(
-        repeating: GridItem(.flexible(), spacing: 12),
+        repeating: GridItem(.flexible(), spacing: 8),
         count: 6
     )
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 0) {
             
-            Text("Выберите дизайн")
+            Text(Constants.title)
                 .font(AppFont.sectionTitle)
-                .padding(.vertical, 12)
-                .padding(.horizontal, 16)
+                .padding(12)
                 
             LazyVGrid(
                 columns: columns,
@@ -41,8 +40,8 @@ struct CategoryPickerView: View {
                     }
                 }
             }
-            .padding(.bottom, 16)
-            .padding(.horizontal, 20)
+            .padding(.bottom, 12)
+            .padding(.horizontal, 7.5)
             
         }
         .background(.grayCardBackgroundSL)
@@ -54,6 +53,11 @@ struct CategoryPickerView: View {
     }
 }
 
+private extension CategoryPickerView {
+    enum Constants {
+        static let title = "Выберите дизайн"
+    }
+}
 
 struct PreviewWrapper: View {
     
@@ -81,4 +85,3 @@ struct PreviewWrapper: View {
         .background(Color(.systemGroupedBackground))
         .preferredColorScheme(.dark)
 }
-
