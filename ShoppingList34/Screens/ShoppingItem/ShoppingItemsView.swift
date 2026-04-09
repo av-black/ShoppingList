@@ -86,9 +86,11 @@ private extension ShoppingItemsView {
                     .listRowSeparator(.hidden)
             }
         }
-        .padding(.bottom, 80)
         .scrollContentBackground(.hidden)
         .listStyle(.plain)
+        .safeAreaInset(edge: .bottom) {
+                Color.clear.frame(height: 80)
+            }
     }
     
     private func shoppingItemRow(for item: ShoppingItem) -> some View {
