@@ -28,7 +28,7 @@ struct CategoryCell: View {
                 .foregroundStyle(
                     isSelected
                     ? .blackUniversalSL
-                    : .whiteUnselectedIconSL
+                    : .whiteIconSL
                 )
                 .scaledToFit()
         }
