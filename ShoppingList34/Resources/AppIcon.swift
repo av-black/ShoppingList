@@ -40,6 +40,7 @@ extension AppIcon {
     static let checkboxSelected = AppIcon.system("checkmark.square.fill")
     static let share = AppIcon.system("square.and.arrow.up")
     static let reset = AppIcon.system("arrow.trianglehead.2.clockwise.rotate.90")
+    static let search = AppIcon.system("magnifyingglass")
     
     // MARK: - Assets: Icons
     
@@ -61,6 +62,7 @@ extension AppIcon {
     static let snow = AppIcon.asset("snowSL")
     static let warning = AppIcon.asset("warningSL")
     static let wrench = AppIcon.asset("wrenchSL")
+    static let trashSL = AppIcon.asset("trashSL")
     
     // MARK: - Assets: Images
     
