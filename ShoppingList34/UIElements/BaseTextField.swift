@@ -29,7 +29,7 @@ struct BaseTextField: View {
                         text = ""
                     } label: {
                         AppIcon.clear.image
-                        .foregroundColor(.blackTextSL)                    }
+                        .foregroundColor(.grayHintUniversalSL)                    }
                     .padding(.trailing, 12)
                 }
             }
