@@ -23,6 +23,7 @@ struct CategoryPickerView: View {
             
             Text(Constants.title)
                 .font(AppFont.sectionTitle)
+                .foregroundStyle(.blackTextSL)
                 .padding(12)
                 
             LazyVGrid(
@@ -45,7 +46,7 @@ struct CategoryPickerView: View {
             
         }
         .background(.grayCardBackgroundSL)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
     
     private func handleSelect(_ item: CategoryItem) {
@@ -60,7 +61,6 @@ private extension CategoryPickerView {
 }
 
 struct PreviewWrapper: View {
-    
     @State private var selected = CategoryItem(icon: AppIcon.airplane)
     
     var body: some View {
