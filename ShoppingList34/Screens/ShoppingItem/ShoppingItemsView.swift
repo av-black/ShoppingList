@@ -12,7 +12,7 @@ struct ShoppingItemsView: View {
     let shoppingItems: [ShoppingItem]
     
     @State private var searchText = ""
-    @Environment(\.dismiss) private var dismiss
+    @Environment(NavigationRouter.self) private var router
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -46,7 +46,7 @@ private extension ShoppingItemsView {
         CustomNavigationBar(
             title: title,
             onBackTap: {
-                dismiss()
+                router.pop()
             },
             onMoreTap: {}
         )
@@ -171,6 +171,7 @@ private extension ShoppingItemsView {
             shoppingItems: ListItem.mock.shoppingItem
         )
     }
+    .environment(NavigationRouter())
 }
 
 #Preview("Пустой") {
@@ -180,4 +181,5 @@ private extension ShoppingItemsView {
             shoppingItems: []
         )
     }
+    .environment(NavigationRouter())
 }

@@ -38,5 +38,6 @@ struct AppNavigationView: View {
                 }
             }
         }
+        .environment(router)
     }
 }
