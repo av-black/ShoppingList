@@ -9,14 +9,15 @@ import SwiftUI
 
 struct ColorSelectorView: View {
     @Binding var selectedColor: ListColor
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: Constants.verticalSpacing) {
             Text(Constants.title)
                 .font(AppFont.sectionTitle)
                 .foregroundStyle(.blackTextSL)
-
+            
             HStack(spacing: Constants.itemSpacing) {
+                Spacer()
                 ForEach(ListColor.allCases) { colorItem in
                     Button {
                         selectedColor = colorItem
@@ -33,7 +34,7 @@ struct ColorSelectorView: View {
                                         height: Constants.selectionSize
                                     )
                             }
-
+                            
                             Circle()
                                 .fill(colorItem.color)
                                 .frame(
@@ -48,6 +49,7 @@ struct ColorSelectorView: View {
                     }
                     .buttonStyle(.plain)
                 }
+                Spacer()
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -63,18 +65,18 @@ struct ColorSelectorView: View {
 private extension ColorSelectorView {
     enum Constants {
         static let title = "Цвет"
-
+        
         static let verticalSpacing: CGFloat = 12
         static let itemSpacing: CGFloat = 12
-
+        
         static let circleSize: CGFloat = 40
         static let selectionSize: CGFloat = 52
         static let selectionLineWidth: CGFloat = 2
-
+        
         static let horizontalPadding: CGFloat = 12
         static let verticalPadding: CGFloat = 12
         static let cornerRadius: CGFloat = 12
-
+        
         static let selectionColor = Color.turquoiseUniversalSL
     }
 }
