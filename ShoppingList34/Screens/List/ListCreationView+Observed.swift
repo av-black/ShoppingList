@@ -98,8 +98,10 @@ private extension ListCreationView.Observed {
     }
     
     func handleCreateList() {
+        router.pop()
     }
     
     func handleSaveList() {
+        router.pop()
     }
 }
