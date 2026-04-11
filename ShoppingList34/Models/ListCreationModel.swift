@@ -5,7 +5,9 @@
 //  Created by Smirnov Michael on 10.04.2026.
 //
 
-enum ListCreationMode {
+import Foundation
+
+enum ListCreationModel {
     case create
     case edit(
         title: String,

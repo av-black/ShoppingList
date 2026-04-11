@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct ListCreationView: View {
-    @State private var observed: ListCreationViewObserved
+    @State private var observed: Observed
     
-    init(observed: ListCreationViewObserved) {
+    init(observed: Observed) {
         _observed = State(initialValue: observed)
     }
     
@@ -23,11 +23,11 @@ struct ListCreationView: View {
             )
             
             ScrollView(showsIndicators: false) {
-                VStack(spacing: 24) {
+                VStack(spacing: 16) {
                     BaseTextField(
                         placeholder: Constants.placeholder,
                         text: $observed.title,
-                        state: observed.textFieldState
+                        state: .normal
                     )
                     
                     ColorSelectorView(
@@ -41,11 +41,11 @@ struct ListCreationView: View {
                     )
                 }
                 .padding(.horizontal, 16)
-                .padding(.top, 8)
+                .padding(.top, 12)
                 .padding(.bottom, 24)
             }
             
-            Spacer(minLength: 0)
+            Spacer()
             
             BaseButton(
                 title: observed.buttonTitle,
@@ -53,7 +53,7 @@ struct ListCreationView: View {
                 action: observed.handlePrimaryButtonTap
             )
             .padding(.horizontal, 16)
-            .padding(.bottom, 16)
+            .padding(.bottom, 20)
         }
         .background(.grayMainBackgroundSL)
         .navigationBarBackButtonHidden(true)
@@ -66,21 +66,22 @@ private extension ListCreationView {
     }
 }
 
-#Preview("Создать список") {
+#Preview("Create") {
     ListCreationView(
-        observed: ListCreationViewObserved(
+        observed: .init(
             mode: .create
         )
     )
 }
 
-#Preview("Редактировать список") {
+#Preview("Edit") {
     ListCreationView(
-        observed: ListCreationViewObserved(
+        observed: .init(
             mode: .edit(
                 title: "Покупки",
                 selectedColor: .blue,
-                selectedCategory: CategoryItem.mockCategoryItems.first!
+                selectedCategory: CategoryItem.mockCategoryItems.first
+                ?? CategoryItem(icon: .cart)
             )
         )
     )
