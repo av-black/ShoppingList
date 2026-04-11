@@ -107,7 +107,7 @@ private extension ShoppingItemsView {
         }
         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
             deleteSwipeAction
-            editSwipeAction
+            editSwipeAction(for: item)
         }
     }
     
@@ -120,9 +120,9 @@ private extension ShoppingItemsView {
     
     // MARK: - Swipe Actions
     
-    var editSwipeAction: some View {
+    func editSwipeAction(for item: ShoppingItem) -> some View {
         Button {
-            print("Edit tapped")
+            router.showModal(.editShoppingItem(item: item))
         } label: {
             AppIcon.edit.image
                 .font(AppFont.body)
