@@ -39,5 +39,25 @@ struct AppNavigationView: View {
             }
         }
         .environment(router)
+        .sheet(item: $router.modalRoute) { route in
+            switch route {
+            case .createShoppingItem:
+                ShoppingItemFormView(
+                    isEditing: false,
+                    onSave: { _, _, _ in
+                        router.dismissModal()
+                    }
+                )
+                
+            case let .editShoppingItem(item):
+                ShoppingItemFormView(
+                    item: item,
+                    isEditing: true,
+                    onSave: { _, _, _ in
+                        router.dismissModal()
+                    }
+                )
+            }
+        }
     }
 }
