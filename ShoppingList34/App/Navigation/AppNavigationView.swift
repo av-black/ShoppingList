@@ -17,7 +17,9 @@ struct AppNavigationView: View {
             ListView(
                 items: ListItem.mocks,
                 onCreateTap: {
-                    print("Create tapped")
+                    router.push(
+                        .listCreationScreen(mode: .create)
+                    )
                 },
                 onItemTap: { item in
                     router.push(
