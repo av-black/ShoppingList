@@ -11,6 +11,8 @@ import Observation
 extension ListCreationView {
     @Observable
     final class Observed {
+        let router: NavigationRouter
+        
         let mode: ListCreationModel
         let items: [CategoryItem]
         
@@ -20,9 +22,11 @@ extension ListCreationView {
         
         init(
             mode: ListCreationModel,
+            router: NavigationRouter,
             items: [CategoryItem] = CategoryItem.mockCategoryItems
         ) {
             self.mode = mode
+            self.router = router
             self.items = items
             
             switch mode {
@@ -65,6 +69,7 @@ extension ListCreationView {
         }
         
         func handleBackTap() {
+            router.pop()
         }
         
         func handlePrimaryButtonTap() {

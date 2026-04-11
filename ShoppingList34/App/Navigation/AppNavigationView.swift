@@ -39,7 +39,7 @@ struct AppNavigationView: View {
                     )
                     
                 case let .listCreationScreen(mode):
-                    ListCreationView(observed: .init(mode: mode))
+                    ListCreationView(observed: .init(mode: mode, router: router))
                 }
             }
         }

@@ -69,7 +69,8 @@ private extension ListCreationView {
 #Preview("Create") {
     ListCreationView(
         observed: .init(
-            mode: .create
+            mode: .create,
+            router: NavigationRouter()
         )
     )
 }
@@ -82,7 +83,8 @@ private extension ListCreationView {
                 selectedColor: .blue,
                 selectedCategory: CategoryItem.mockCategoryItems.first
                 ?? CategoryItem(icon: .cart)
-            )
+            ),
+            router: NavigationRouter()
         )
     )
 }
