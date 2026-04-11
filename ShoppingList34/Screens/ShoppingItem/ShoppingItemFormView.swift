@@ -9,8 +9,19 @@ import SwiftUI
  
 struct ShoppingItemFormView: View {
     @Environment(\.dismiss) private var dismiss
+    let item: ShoppingItem?
     var isEditing: Bool = false
     var onSave: (String, String, MeasurementType) -> Void
+    
+    init(
+        item: ShoppingItem? = nil,
+        isEditing: Bool = false,
+        onSave: @escaping (String, String, MeasurementType) -> Void
+    ) {
+        self.item = item
+        self.isEditing = isEditing
+        self.onSave = onSave
+    }
  
     // MARK: - Состояние полей формы
  
