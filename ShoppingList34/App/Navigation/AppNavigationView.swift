@@ -48,6 +48,7 @@ struct AppNavigationView: View {
                         router.dismissModal()
                     }
                 )
+                .environment(router)
                 
             case let .editShoppingItem(item):
                 ShoppingItemFormView(
@@ -57,6 +58,7 @@ struct AppNavigationView: View {
                         router.dismissModal()
                     }
                 )
+                .environment(router)
             }
         }
     }

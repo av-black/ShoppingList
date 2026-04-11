@@ -8,7 +8,8 @@
 import SwiftUI
  
 struct ShoppingItemFormView: View {
-    @Environment(\.dismiss) private var dismiss
+    @Environment(NavigationRouter.self) private var router
+    
     let item: ShoppingItem?
     var isEditing: Bool = false
     var onSave: (String, String, MeasurementType) -> Void
@@ -22,9 +23,9 @@ struct ShoppingItemFormView: View {
         self.isEditing = isEditing
         self.onSave = onSave
     }
- 
+    
     // MARK: - Состояние полей формы
- 
+    
     @State private var name = ""
     @State private var amount = ""
     @State private var selectedUnit: MeasurementType = .piece
@@ -32,9 +33,9 @@ struct ShoppingItemFormView: View {
     private var isDoneButtonActive: Bool {
         !name.trimmingCharacters(in: .whitespaces).isEmpty && !amount.isEmpty
     }
- 
+    
     // MARK: - Body
- 
+    
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
@@ -50,13 +51,13 @@ struct ShoppingItemFormView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(Constants.cancelButton) {
-                        dismiss()
+                        router.dismissModal()
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(Constants.doneButton) {
                         onSave(name, amount, selectedUnit)
-                        dismiss()
+                        router.dismissModal()
                     }
                     .fontWeight(.semibold)
                     .disabled(!isDoneButtonActive)
@@ -135,10 +136,12 @@ private extension ShoppingItemFormView {
     ShoppingItemFormView(isEditing: false) { name, amount, unit in
         print("Создано: \(name), \(amount) \(unit.rawValue)")
     }
+    .environment(NavigationRouter())
 }
  
 #Preview("Редактирование") {
     ShoppingItemFormView(isEditing: true) { name, amount, unit in
         print("Изменено: \(name), \(amount) \(unit.rawValue)")
     }
+    .environment(NavigationRouter())
 }
