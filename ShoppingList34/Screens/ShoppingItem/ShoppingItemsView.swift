@@ -148,7 +148,9 @@ private extension ShoppingItemsView {
         BaseButton(
             title: Constants.buttonText,
             isActive: true,
-            action: {}
+            action: {
+                router.showModal(.createShoppingItem)
+            }
         )
         .padding(.horizontal, 16)
         .padding(.bottom, 20)
