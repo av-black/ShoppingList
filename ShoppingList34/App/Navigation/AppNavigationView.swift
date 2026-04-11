@@ -35,6 +35,9 @@ struct AppNavigationView: View {
                         title: title,
                         shoppingItems: shoppingItems
                     )
+                    
+                case let .listCreationScreen(mode):
+                    ListCreationView(observed: .init(mode: mode))
                 }
             }
         }
