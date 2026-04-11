@@ -10,4 +10,5 @@ import Foundation
 /// Маршруты push-навигации приложения.
 enum NavigationRoute: Hashable {
     case shoppingItemsScreen(title: String, shoppingItems: [ShoppingItem])
+    case listCreationScreen(mode: ListCreationModel)
 }
