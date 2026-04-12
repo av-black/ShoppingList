@@ -57,7 +57,6 @@ struct ShoppingItemFormView: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(Constants.doneButton) {
                         onSave(name, amount, selectedUnit)
-                        router.dismissModal()
                     }
                     .fontWeight(.semibold)
                     .disabled(!isDoneButtonActive)
