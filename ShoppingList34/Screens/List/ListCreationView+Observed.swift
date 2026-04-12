@@ -11,8 +11,6 @@ import Observation
 extension ListCreationView {
     @Observable
     final class Observed {
-        let router: NavigationRouter
-        
         let mode: ListCreationModel
         let items: [CategoryItem]
         
@@ -22,11 +20,9 @@ extension ListCreationView {
         
         init(
             mode: ListCreationModel,
-            router: NavigationRouter,
             items: [CategoryItem] = CategoryItem.mockCategoryItems
         ) {
             self.mode = mode
-            self.router = router
             self.items = items
             
             switch mode {
@@ -68,18 +64,17 @@ extension ListCreationView {
             !trimmedTitle.isEmpty
         }
         
-        func handleBackTap() {
-            router.pop()
-        }
-        
-        func handlePrimaryButtonTap() {
+        func handlePrimaryButtonTap(
+            onCreateTap: () -> Void,
+            onSaveTap: () -> Void
+        ) {
             guard isButtonActive else { return }
             
             switch mode {
             case .create:
-                handleCreateList()
+                handleCreateList(onCreateTap: onCreateTap)
             case .edit:
-                handleSaveList()
+                handleSaveList(onSaveTap: onSaveTap)
             }
         }
     }
@@ -97,11 +92,11 @@ private extension ListCreationView.Observed {
         title.trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
-    func handleCreateList() {
-        router.pop()
+    func handleCreateList(onCreateTap: () -> Void) {
+        onCreateTap()
     }
     
-    func handleSaveList() {
-        router.pop()
+    func handleSaveList(onSaveTap: () -> Void) {
+        onSaveTap()
     }
 }

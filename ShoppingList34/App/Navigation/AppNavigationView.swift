@@ -39,7 +39,18 @@ struct AppNavigationView: View {
                     )
                     
                 case let .listCreationScreen(mode):
-                    ListCreationView(observed: .init(mode: mode, router: router))
+                    ListCreationView(
+                        observed: .init(mode: mode),
+                        onBackTap: {
+                            router.pop()
+                        },
+                        onCreateTap: {
+                            router.pop()
+                        },
+                        onSaveTap: {
+                            router.pop()
+                        }
+                    )
                 }
             }
         }
