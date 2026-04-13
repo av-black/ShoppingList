@@ -10,14 +10,19 @@ import SwiftUI
 @main
 struct ShoppingList34App: App {
     @State private var appState = AppState()
-    
+    @State private var themeStore = ThemeStore()
+
     var body: some Scene {
         WindowGroup {
-            if appState.hasLaunchedBefore {
-                ContentView()
-            } else {
-                WelcomeView(onStart: appState.completeOnboarding)
+            Group {
+                if appState.hasLaunchedBefore {
+                    ContentView()
+                } else {
+                    WelcomeView(onStart: appState.completeOnboarding)
+                }
             }
+            .environment(themeStore)
+            .preferredColorScheme(themeStore.selectedTheme.colorScheme)
         }
     }
 }

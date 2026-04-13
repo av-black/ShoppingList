@@ -36,7 +36,7 @@ private extension ListView {
                 .font(AppFont.title1)
                 .foregroundStyle(.blackTitleSL)
             Spacer()
-            MoreButton(action: {})
+            ListOptionsMenu(onSortTap: handleSortTap)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
@@ -74,6 +74,9 @@ private extension ListView {
         .padding(.horizontal, 16)
         .padding(.vertical, 20)
     }
+    
+    func handleSortTap() {
+    }
 }
 
 // MARK: - Constants
@@ -89,8 +92,10 @@ private extension ListView {
 
 #Preview("Пустой") {
     ListView(items: [], onCreateTap: {})
+        .environment(ThemeStore())
 }
 
 #Preview("С данными") {
     ListView(items: ListItem.mocks, onCreateTap: {})
+        .environment(ThemeStore())
 }
