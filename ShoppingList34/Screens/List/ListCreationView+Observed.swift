@@ -64,17 +64,17 @@ extension ListCreationView {
             !trimmedTitle.isEmpty
         }
         
-        func handleBackTap() {
-        }
-        
-        func handlePrimaryButtonTap() {
+        func handlePrimaryButtonTap(
+            onCreateTap: () -> Void,
+            onSaveTap: () -> Void
+        ) {
             guard isButtonActive else { return }
             
             switch mode {
             case .create:
-                handleCreateList()
+                handleCreateList(onCreateTap: onCreateTap)
             case .edit:
-                handleSaveList()
+                handleSaveList(onSaveTap: onSaveTap)
             }
         }
     }
@@ -92,9 +92,11 @@ private extension ListCreationView.Observed {
         title.trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
-    func handleCreateList() {
+    func handleCreateList(onCreateTap: () -> Void) {
+        onCreateTap()
     }
     
-    func handleSaveList() {
+    func handleSaveList(onSaveTap: () -> Void) {
+        onSaveTap()
     }
 }

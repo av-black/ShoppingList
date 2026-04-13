@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum AppIcon {
+enum AppIcon: Hashable {
     case system(String)
     case asset(String)
 }

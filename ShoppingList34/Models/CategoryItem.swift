@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CategoryItem: Identifiable {
+struct CategoryItem: Identifiable, Hashable {
     let id: UUID
     let icon: AppIcon
     

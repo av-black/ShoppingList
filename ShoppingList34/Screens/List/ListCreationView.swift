@@ -10,15 +10,27 @@ import SwiftUI
 struct ListCreationView: View {
     @State private var observed: Observed
     
-    init(observed: Observed) {
+    let onBackTap: () -> Void
+    let onCreateTap: () -> Void
+    let onSaveTap: () -> Void
+    
+    init(
+        observed: Observed,
+        onBackTap: @escaping () -> Void,
+        onCreateTap: @escaping () -> Void,
+        onSaveTap: @escaping () -> Void
+    ) {
         _observed = State(initialValue: observed)
+        self.onBackTap = onBackTap
+        self.onCreateTap = onCreateTap
+        self.onSaveTap = onSaveTap
     }
     
     var body: some View {
         VStack(spacing: 0) {
             CustomNavigationBar(
                 title: observed.screenTitle,
-                onBackTap: observed.handleBackTap,
+                onBackTap: onBackTap,
                 onMoreTap: nil
             )
             
@@ -50,7 +62,12 @@ struct ListCreationView: View {
             BaseButton(
                 title: observed.buttonTitle,
                 isActive: observed.isButtonActive,
-                action: observed.handlePrimaryButtonTap
+                action: {
+                    observed.handlePrimaryButtonTap(
+                        onCreateTap: onCreateTap,
+                        onSaveTap: onSaveTap
+                    )
+                }
             )
             .padding(.horizontal, 16)
             .padding(.bottom, 20)
@@ -69,8 +86,11 @@ private extension ListCreationView {
 #Preview("Create") {
     ListCreationView(
         observed: .init(
-            mode: .create
-        )
+            mode: .create,
+        ),
+        onBackTap: {},
+        onCreateTap: {},
+        onSaveTap: {}
     )
 }
 
@@ -83,6 +103,9 @@ private extension ListCreationView {
                 selectedCategory: CategoryItem.mockCategoryItems.first
                 ?? CategoryItem(icon: .cart)
             )
-        )
+        ),
+        onBackTap: {},
+        onCreateTap: {},
+        onSaveTap: {}
     )
 }

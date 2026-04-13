@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ListCreationModel {
+enum ListCreationModel: Hashable {
     case create
     case edit(
         title: String,
