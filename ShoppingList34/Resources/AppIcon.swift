@@ -22,6 +22,29 @@ extension AppIcon {
         }
     }
     
+    var rawValue: String {
+        switch self {
+        case .system(let name):
+            return "system:\(name)"
+        case .asset(let name):
+            return "asset:\(name)"
+        }
+    }
+ 
+    // MARK: - Initialization
+    
+    init(rawValue: String) {
+        if rawValue.hasPrefix("system:") {
+            let name = rawValue.replacingOccurrences(of: "system:", with: "")
+            self = .system(name)
+        } else if rawValue.hasPrefix("asset:") {
+            let name = rawValue.replacingOccurrences(of: "asset:", with: "")
+            self = .asset(name)
+        } else {
+            self = .system("questionmark")
+        }
+    }
+    
     // MARK: - SF Symbols
     
     static let more = AppIcon.system("ellipsis.circle")
