@@ -108,7 +108,9 @@ private extension ShoppingItemsView {
         VStack(spacing: 0) {
             ShoppingItemViewCell(
                 shoppingItem: item,
-                onCheckboxTap: {}
+                onCheckboxTap: {
+                    toggle(item)
+                }
             )
             
             Divider()
@@ -120,6 +122,12 @@ private extension ShoppingItemsView {
             deleteSwipeAction
             editSwipeAction(for: item)
         }
+    }
+    
+    private func toggle(_ item: ShoppingItem) {
+        guard let entity = entity.items.first(where: { $0.id == item.id }) else { return }
+        
+        entity.isCompleted.toggle()
     }
     
     // MARK: - Empty State
