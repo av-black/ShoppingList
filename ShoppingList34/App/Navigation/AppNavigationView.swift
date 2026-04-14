@@ -23,23 +23,14 @@ struct AppNavigationView: View {
                         .listCreationScreen(mode: .create)
                     )
                 },
-                onItemTap: { item in
-                    router.push(
-                        .shoppingItemsScreen(
-                            title: item.title,
-                            shoppingItems: item.shoppingItem
-                        )
-                    )
+                onItemTap: { entity in
+                    router.push(.shoppingItemsScreen(entity: entity))
                 }
             )
             .navigationDestination(for: NavigationRoute.self) { route in
                 switch route {
-                case let .shoppingItemsScreen(title, shoppingItems):
-                    ShoppingItemsView(
-                        title: title,
-                        shoppingItems: shoppingItems
-                    )
-                    
+                case let .shoppingItemsScreen(entity: item):
+                    ShoppingItemsView(entity: item)
                 case let .listCreationScreen(mode):
                     ListCreationView(
                         observed: .init(mode: mode),
@@ -79,7 +70,26 @@ struct AppNavigationView: View {
             case .createShoppingItem:
                 ShoppingItemFormView(
                     isEditing: false,
-                    onSave: { _, _, _ in
+                    onSave: { name, amount, unit in
+                        
+                        guard let route = router.path.last else {
+                            router.dismissModal()
+                            return
+                        }
+                        
+                        if case let .shoppingItemsScreen(entity) = route {
+                            
+                            let item = ShoppingItemEntity(
+                                title: name,
+                                amount: Double(amount) ?? 1,
+                                type: unit.rawValue,
+                                list: entity
+                            )
+                            
+                            entity.items.append(item)
+                            context.insert(item)
+                        }
+                        
                         router.dismissModal()
                     }
                 )

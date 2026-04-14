@@ -11,18 +11,15 @@ import SwiftData
 struct ListView: View {
     @Query
     private var entities: [ListItemEntity]
-    var items: [ListItem] {
-        entities.map { $0.toModel() }
-    }
     
     let onCreateTap: () -> Void
-    let onItemTap: (ListItem) -> Void
+    let onItemTap: (ListItemEntity) -> Void
 
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack(spacing: 0) {
                 header
-                if items.isEmpty {
+                if entities.isEmpty {
                     emptyState
                 } else {
                     listContent
@@ -56,11 +53,11 @@ private extension ListView {
 
     var listContent: some View {
         List {
-            ForEach(items) { item in
+            ForEach(entities) { entity in
                 Button {
-                    onItemTap(item)
+                    onItemTap(entity)
                 } label: {
-                    ListViewCell(listItem: item)
+                    ListViewCell(listItem: entity.toModel())
                         .padding(.horizontal, 16)
                         .padding(.vertical, 6)
                 }
