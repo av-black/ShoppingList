@@ -97,9 +97,13 @@ struct AppNavigationView: View {
                 
             case let .editShoppingItem(item):
                 ShoppingItemFormView(
-                    item: item,
+                    item: item.toModel(),
                     isEditing: true,
-                    onSave: { _, _, _ in
+                    onSave: { name, amount, unit in
+                        item.title = name
+                        item.amount = Double(amount) ?? 1
+                        item.type = unit.rawValue
+
                         router.dismissModal()
                     }
                 )

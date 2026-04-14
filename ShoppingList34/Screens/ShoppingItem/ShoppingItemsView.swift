@@ -133,7 +133,6 @@ private extension ShoppingItemsView {
     private func delete(_ item: ShoppingItem) {
         guard let index = entity.items.firstIndex(where: { $0.id == item.id }) else { return }
         
-        let object = entity.items[index]
         entity.items.remove(at: index)
     }
     
@@ -148,7 +147,8 @@ private extension ShoppingItemsView {
     
     func editSwipeAction(for item: ShoppingItem) -> some View {
         Button {
-            router.showModal(.editShoppingItem(item: item))
+            guard let entityItem = entity.items.first(where: { $0.id == item.id }) else { return }
+            router.showModal(.editShoppingItem(item: entityItem))
         } label: {
             AppIcon.edit.image
                 .font(AppFont.body)
@@ -220,7 +220,6 @@ private extension ShoppingItemsView {
     .modelContainer(container)
     .environment(NavigationRouter())
 }
-
 
 #Preview("Пустой") {
     // swiftlint:disable:next force_try

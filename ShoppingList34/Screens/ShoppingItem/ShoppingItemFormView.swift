@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
- 
+
 struct ShoppingItemFormView: View {
     @Environment(NavigationRouter.self) private var router
     
@@ -63,13 +63,20 @@ struct ShoppingItemFormView: View {
                 }
             }
         }
+        .onAppear {
+            if let item {
+                name = item.title
+                amount = String(item.amount)
+                selectedUnit = item.type
+            }
+        }
     }
 }
- 
+
 // MARK: - Подвью
- 
+
 private extension ShoppingItemFormView {
- 
+    
     var nameField: some View {
         BaseTextField(
             placeholder: Constants.namePlaceholder,
@@ -77,14 +84,14 @@ private extension ShoppingItemFormView {
             state: .normal
         )
     }
- 
+    
     var amountRow: some View {
         HStack(spacing: 16) {
             amountField
             unitPicker
         }
     }
- 
+    
     var amountField: some View {
         TextField(Constants.amountPlaceholder, text: $amount)
             .font(AppFont.body)
@@ -95,13 +102,13 @@ private extension ShoppingItemFormView {
             .background(.grayCardBackgroundSL)
             .clipShape(RoundedRectangle(cornerRadius: 12))
     }
- 
+    
     var unitPicker: some View {
         HStack(spacing: 4) {
             Text(Constants.unitLabel)
                 .font(AppFont.body)
                 .foregroundStyle(.grayHintUniversalSL)
- 
+            
             Picker("", selection: $selectedUnit) {
                 ForEach(MeasurementType.allCases, id: \.self) { unit in
                     Text(unit.rawValue).tag(unit)
@@ -128,16 +135,16 @@ private extension ShoppingItemFormView {
         static let unitLabel = "Ед.изм.:"
     }
 }
- 
+
 // MARK: - Preview
- 
+
 #Preview("Создание") {
     ShoppingItemFormView(isEditing: false) { name, amount, unit in
         print("Создано: \(name), \(amount) \(unit.rawValue)")
     }
     .environment(NavigationRouter())
 }
- 
+
 #Preview("Редактирование") {
     ShoppingItemFormView(isEditing: true) { name, amount, unit in
         print("Изменено: \(name), \(amount) \(unit.rawValue)")
