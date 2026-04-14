@@ -6,9 +6,15 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ListView: View {
-    let items: [ListItem]
+    @Query
+    private var entities: [ListItemEntity]
+    var items: [ListItem] {
+        entities.map { $0.toModel() }
+    }
+    
     let onCreateTap: () -> Void
     let onItemTap: (ListItem) -> Void
 
@@ -93,9 +99,26 @@ private extension ListView {
 
 // MARK: - Preview
 
+enum PreviewContainer {
+    static let container: ModelContainer = {
+        // swiftlint:disable:next force_try
+        let container = try! ModelContainer(
+            for: ListItemEntity.self,
+            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+        )
+        
+        let context = container.mainContext
+        
+        ListItem.mocks.forEach {
+            context.insert($0.toEntity())
+        }
+        
+        return container
+    }()
+}
+
 #Preview("Пустой") {
     ListView(
-        items: [],
         onCreateTap: {},
         onItemTap: { _ in }
     )
@@ -103,8 +126,8 @@ private extension ListView {
 
 #Preview("С данными") {
     ListView(
-        items: ListItem.mocks,
         onCreateTap: {},
         onItemTap: { _ in }
     )
+    .modelContainer(PreviewContainer.container)
 }

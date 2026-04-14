@@ -65,16 +65,23 @@ extension ListCreationView {
         }
         
         func handlePrimaryButtonTap(
-            onCreateTap: () -> Void,
-            onSaveTap: () -> Void
+            onCreateTap: (ListItem) -> Void,
+            onSaveTap: (ListItem) -> Void
         ) {
             guard isButtonActive else { return }
             
+            let item = ListItem(
+                    title: title,
+                    designColor: selectedColor,
+                    icon: selectedCategory.icon,
+                    shoppingItem: []
+                )
+            
             switch mode {
             case .create:
-                handleCreateList(onCreateTap: onCreateTap)
+                onCreateTap(item)
             case .edit:
-                handleSaveList(onSaveTap: onSaveTap)
+                onSaveTap(item)
             }
         }
     }

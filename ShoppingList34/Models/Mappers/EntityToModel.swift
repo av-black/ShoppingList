@@ -5,9 +5,9 @@
 //  Created by Дмитрий Перчемиди on 13.04.2026.
 //
 
-extension ListItemEntity {
+@MainActor extension ListItemEntity {
     
-    @MainActor func toModel() -> ListItem {
+    func toModel() -> ListItem {
         ListItem(
             id: id,
             title: title,
@@ -15,6 +15,10 @@ extension ListItemEntity {
             icon: AppIcon(rawValue: icon),
             shoppingItem: items.map { $0.toModel() }
         )
+    }
+    
+    static func makeMock(from item: ListItem) -> ListItemEntity {
+        item.toEntity()
     }
 }
 

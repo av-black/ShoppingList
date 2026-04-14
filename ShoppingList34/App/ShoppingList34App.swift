@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct ShoppingList34App: App {
@@ -19,5 +20,9 @@ struct ShoppingList34App: App {
                 WelcomeView(onStart: appState.completeOnboarding)
             }
         }
+        .modelContainer(for: [
+            ListItemEntity.self,
+            ShoppingItemEntity.self
+        ])
     }
 }

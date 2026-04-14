@@ -11,14 +11,14 @@ struct ListCreationView: View {
     @State private var observed: Observed
     
     let onBackTap: () -> Void
-    let onCreateTap: () -> Void
-    let onSaveTap: () -> Void
+    let onCreateTap: (ListItem) -> Void
+    let onSaveTap: (ListItem) -> Void
     
     init(
         observed: Observed,
         onBackTap: @escaping () -> Void,
-        onCreateTap: @escaping () -> Void,
-        onSaveTap: @escaping () -> Void
+        onCreateTap: @escaping (ListItem) -> Void,
+        onSaveTap: @escaping (ListItem) -> Void
     ) {
         _observed = State(initialValue: observed)
         self.onBackTap = onBackTap
@@ -89,8 +89,8 @@ private extension ListCreationView {
             mode: .create,
         ),
         onBackTap: {},
-        onCreateTap: {},
-        onSaveTap: {}
+        onCreateTap: {_ in},
+        onSaveTap: {_ in}
     )
 }
 
@@ -105,7 +105,7 @@ private extension ListCreationView {
             )
         ),
         onBackTap: {},
-        onCreateTap: {},
-        onSaveTap: {}
+        onCreateTap: {_ in},
+        onSaveTap: {_ in}
     )
 }

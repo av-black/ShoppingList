@@ -6,16 +6,18 @@
 //
 
 import SwiftUI
+import SwiftData
+import Observation
 
 /// Корневой экран навигации приложения.
 /// Отвечает за настройку NavigationStack и переходы между экранами.
 struct AppNavigationView: View {
     @State private var router = NavigationRouter()
+    @Environment(\.modelContext) var context
     
     var body: some View {
         NavigationStack(path: $router.path) {
             ListView(
-                items: ListItem.mocks,
                 onCreateTap: {
                     router.push(
                         .listCreationScreen(mode: .create)
@@ -44,10 +46,27 @@ struct AppNavigationView: View {
                         onBackTap: {
                             router.pop()
                         },
-                        onCreateTap: {
+                        onCreateTap: { listItem in
+                            let entity = listItem.toEntity()
+                            context.insert(entity)
                             router.pop()
                         },
-                        onSaveTap: {
+                        onSaveTap: { listItem in
+                            let id = listItem.id
+                            
+                            let descriptor = FetchDescriptor<ListItemEntity>(
+                                predicate: #Predicate { $0.id == id }
+                            )
+                            
+                            if let entity = try? context.fetch(descriptor).first {
+                                
+                                entity.title = listItem.title
+                                entity.color = listItem.designColor.rawValue
+                                entity.icon = listItem.icon.rawValue
+                                
+                            } else {
+                                context.insert(listItem.toEntity())
+                            }
                             router.pop()
                         }
                     )
