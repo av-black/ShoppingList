@@ -119,7 +119,7 @@ private extension ShoppingItemsView {
                 .background(Color.graySeparatorSL)
         }
         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-            deleteSwipeAction
+            deleteSwipeAction(for: item)
             editSwipeAction(for: item)
         }
     }
@@ -128,6 +128,13 @@ private extension ShoppingItemsView {
         guard let entity = entity.items.first(where: { $0.id == item.id }) else { return }
         
         entity.isCompleted.toggle()
+    }
+    
+    private func delete(_ item: ShoppingItem) {
+        guard let index = entity.items.firstIndex(where: { $0.id == item.id }) else { return }
+        
+        let object = entity.items[index]
+        entity.items.remove(at: index)
     }
     
     // MARK: - Empty State
@@ -150,9 +157,9 @@ private extension ShoppingItemsView {
         .tint(.grayEditSL)
     }
     
-    var deleteSwipeAction: some View {
+    func deleteSwipeAction(for item: ShoppingItem) -> some View {
         Button {
-            print("Delete tapped")
+            delete(item)
         } label: {
             AppIcon.trashSL.image
                 .font(AppFont.body)
