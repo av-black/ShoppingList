@@ -10,6 +10,7 @@ import Foundation
 enum ListCreationModel: Hashable {
     case create
     case edit(
+        id: UUID,
         title: String,
         selectedColor: ListColor,
         selectedCategory: CategoryItem

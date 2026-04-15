@@ -14,6 +14,7 @@ extension ListCreationView {
         let mode: ListCreationModel
         let items: [CategoryItem]
         
+        var id: UUID?
         var title: String
         var selectedColor: ListColor
         var selectedCategory: CategoryItem
@@ -27,15 +28,13 @@ extension ListCreationView {
             
             switch mode {
             case .create:
+                id = nil
                 title = ""
                 selectedColor = .blue
                 selectedCategory = items.first ?? CategoryItem(icon: .cart)
-                
-            case let .edit(
-                title,
-                selectedColor,
-                selectedCategory
-            ):
+
+            case let .edit(id, title, selectedColor, selectedCategory):
+                self.id = id
                 self.title = title
                 self.selectedColor = selectedColor
                 self.selectedCategory = selectedCategory
@@ -71,11 +70,12 @@ extension ListCreationView {
             guard isButtonActive else { return }
             
             let item = ListItem(
-                    title: title,
-                    designColor: selectedColor,
-                    icon: selectedCategory.icon,
-                    shoppingItem: []
-                )
+                id: id ?? UUID(),
+                title: title,
+                designColor: selectedColor,
+                icon: selectedCategory.icon,
+                shoppingItem: []
+            )
             
             switch mode {
             case .create:

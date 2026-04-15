@@ -98,6 +98,7 @@ private extension ListCreationView {
     ListCreationView(
         observed: .init(
             mode: .edit(
+                id: UUID(),
                 title: "Покупки",
                 selectedColor: .blue,
                 selectedCategory: CategoryItem.mockCategoryItems.first

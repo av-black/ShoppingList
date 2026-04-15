@@ -11,10 +11,14 @@ import SwiftData
 struct ListView: View {
     @Query
     private var entities: [ListItemEntity]
+    @Environment(NavigationRouter.self)
+    private var router
+    @Environment(\.modelContext)
+    private var context
     
     let onCreateTap: () -> Void
     let onItemTap: (ListItemEntity) -> Void
-
+    
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack(spacing: 0) {
@@ -45,12 +49,12 @@ private extension ListView {
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
     }
-
+    
     var emptyState: some View {
         NoListsPlaceholderView()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
-
+    
     var listContent: some View {
         List {
             ForEach(entities) { entity in
@@ -62,6 +66,11 @@ private extension ListView {
                         .padding(.vertical, 6)
                 }
                 .buttonStyle(.plain)
+                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                    deleteAction(for: entity)
+                    duplicateAction(for: entity)
+                    editAction(for: entity)
+                }
                 .listRowInsets(EdgeInsets())
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
@@ -73,7 +82,7 @@ private extension ListView {
             Color.clear.frame(height: 80)
         }
     }
-
+    
     var createButton: some View {
         BaseButton(
             title: Constants.buttonTitle,
@@ -86,6 +95,64 @@ private extension ListView {
     
     func handleSortTap() {
         // TODO: - Add Sort function
+    }
+    
+    func deleteAction(for entity: ListItemEntity) -> some View {
+        Button {
+            handleDelete(entity)
+        } label: {
+            AppIcon.trash.image
+                .font(AppFont.body)
+                .foregroundStyle(.whiteUniversalSL)
+        }
+        .tint(.redSL)
+    }
+    
+    func editAction(for entity: ListItemEntity) -> some View {
+        Button {
+            handleEdit(entity)
+        } label: {
+            AppIcon.edit.image
+                .font(AppFont.body)
+                .foregroundStyle(.whiteUniversalSL)
+        }
+        .tint(.gray)
+    }
+    
+    func duplicateAction(for entity: ListItemEntity) -> some View {
+        Button {
+            handleDuplicate(entity)
+        } label: {
+            AppIcon.duplicate.image
+                .font(AppFont.body)
+                .foregroundStyle(.whiteUniversalSL)
+        }
+        .tint(.orangeDuplicateSL)
+    }
+    
+    func handleDelete(_ entity: ListItemEntity) {
+        context.delete(entity)
+    }
+    
+    func handleEdit(_ entity: ListItemEntity) {
+        let model = entity.toModel()
+        
+        router.push(
+            .listCreationScreen(
+                mode: .edit(
+                    id: model.id,
+                    title: model.title,
+                    selectedColor: model.designColor,
+                    selectedCategory: CategoryItem(icon: model.icon)
+                )
+            )
+        )
+    }
+    
+    func handleDuplicate(_ entity: ListItemEntity) {
+        let newItem = ListDuplicateHelper.makeCopy(from: entity.toModel(), in: context)
+        
+        context.insert(newItem.toEntity())
     }
 }
 

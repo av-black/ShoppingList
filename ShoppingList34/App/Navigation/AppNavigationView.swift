@@ -38,47 +38,9 @@ struct AppNavigationView: View {
                             router.pop()
                         },
                         onCreateTap: { listItem in
-                            // Получение всех списков из БД и фильтр по названию
-                            let descriptor = FetchDescriptor<ListItemEntity>()
-                            let allLists = (try? context.fetch(descriptor)) ?? []
-                            let existingLists = allLists.filter {
-                                $0.title.contains(listItem.title)
-                            }
+                            let newItem = ListDuplicateHelper.makeCopy(from: listItem, in: context)
                             
-                            // Проверка на полное совпадение
-                            let exactMatches = existingLists.filter {
-                                $0.title == listItem.title &&
-                                $0.color == listItem.designColor.rawValue &&
-                                $0.icon == listItem.icon.rawValue
-                            }
-                            var newItem = listItem
-                            
-                            // Логика нумерации копий
-                            if !exactMatches.isEmpty {
-                                let baseTitle = listItem.title
-                                
-                                let copies = existingLists.filter {
-                                    $0.title.hasPrefix("Копия") && $0.title.contains(baseTitle)
-                                }
-                                
-                                let copyNumber = copies.count + 1
-                                
-                                if copyNumber == 1 {
-                                    newItem.title = "Копия \(baseTitle)"
-                                } else {
-                                    newItem.title = "Копия \(copyNumber) \(baseTitle)"
-                                }
-                                
-                                if let original = exactMatches.first {
-                                    newItem.designColor = ListColor(rawValue: original.color) ?? newItem.designColor
-                                    newItem.icon = AppIcon(rawValue: original.icon)
-                                }
-                            }
-                            
-                            // Сохранение
-                            let entity = newItem.toEntity()
-                            context.insert(entity)
-                            
+                            context.insert(newItem.toEntity())
                             router.pop()
                         },
                         onSaveTap: { listItem in
