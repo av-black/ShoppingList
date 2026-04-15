@@ -8,9 +8,9 @@
 import SwiftUI
 
 enum ListColor: String, CaseIterable, Identifiable, Hashable {
+    case blue = "BlueSelectionSL"
     case green = "GreenSelectionSL"
     case purple = "PurpleSelectionSL"
-    case blue = "BlueSelectionSL"
     case red = "RedSelectionSL"
     case yellow = "YellowSelectionSL"
 
