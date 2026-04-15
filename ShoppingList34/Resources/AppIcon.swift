@@ -56,6 +56,7 @@ extension AppIcon {
     static let theme = AppIcon.system("circle.lefthalf.filled")
     static let sort = AppIcon.system("arrow.up.arrow.down")
     static let chevronDown = AppIcon.system("chevron.down")
+    static let chevronRight = AppIcon.system("chevron.right")
     static let checkmark = AppIcon.system("checkmark")
     static let selector = AppIcon.system("chevron.up.chevron.down")
     static let checkbox = AppIcon.system("square")

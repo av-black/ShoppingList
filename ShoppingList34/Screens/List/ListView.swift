@@ -40,7 +40,7 @@ private extension ListView {
                 .font(AppFont.title1)
                 .foregroundStyle(.blackTitleSL)
             Spacer()
-            MoreButton(action: {})
+            ListOptionsMenu(onSortTap: handleSortTap)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
@@ -83,6 +83,10 @@ private extension ListView {
         .padding(.horizontal, 16)
         .padding(.vertical, 20)
     }
+    
+    func handleSortTap() {
+        // TODO: - Add Sort function
+    }
 }
 
 // MARK: - Constants
@@ -119,6 +123,7 @@ enum PreviewContainer {
         onCreateTap: {},
         onItemTap: { _ in }
     )
+    .environment(ThemeStore())
 }
 
 #Preview("С данными") {
@@ -127,4 +132,5 @@ enum PreviewContainer {
         onItemTap: { _ in }
     )
     .modelContainer(PreviewContainer.container)
+    .environment(ThemeStore())
 }
