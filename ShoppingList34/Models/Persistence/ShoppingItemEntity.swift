@@ -1,5 +1,5 @@
 //
-//  Untitled.swift
+//  ShoppingItemEntity.swift
 //  ShoppingList34
 //
 //  Created by Дмитрий Перчемиди on 13.04.2026.
