@@ -15,21 +15,21 @@ struct ListOptionsMenu: View {
     @State private var isExpanded = false
 
     var body: some View {
-        Button {
+        MoreButton {
             isPresented.toggle()
-        } label: {
-            AppIcon.more.image
-                .font(AppFont.title3)
-                .foregroundStyle(.blackSettingsTextSL)
-                .frame(width: 44, height: 44)
-                .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
         .popover(isPresented: $isPresented, arrowEdge: .top) {
             content
                 .presentationCompactAdaptation(.popover)
         }
     }
+}
+
+// MARK: - Titles
+
+private enum MenuTitle {
+    static let theme = "Установить тему"
+    static let sort = "Сортировать по\nАлфавиту"
 }
 
 // MARK: - Content
@@ -48,11 +48,10 @@ private extension ListOptionsMenu {
 
             sortRow
         }
-        .frame(width: 300)
+        .frame(width: 250)
         .background(Color.grayCardBackgroundSL)
-        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
         .shadow(color: .black.opacity(0.12), radius: 16, x: 0, y: 6)
-        .padding(8)
     }
 
     var separator: some View {
@@ -67,7 +66,7 @@ private extension ListOptionsMenu {
 private extension ListOptionsMenu {
     var themeRow: some View {
         MenuRow(
-            title: "Установить тему",
+            title: MenuTitle.theme,
             leftSystemIcon: isExpanded ? "chevron.down" : "chevron.right",
             rightIcon: AppIcon.theme.image,
             isMultiline: false,
@@ -81,7 +80,7 @@ private extension ListOptionsMenu {
 
     var sortRow: some View {
         MenuRow(
-            title: "Сортировать по\nАлфавиту",
+            title: MenuTitle.sort,
             rightIcon: AppIcon.sort.image,
             isMultiline: true,
             titleFont: AppFont.body
@@ -89,6 +88,7 @@ private extension ListOptionsMenu {
             onSortTap()
             isPresented = false
         }
+        .padding(.leading, 31)
     }
 }
 
