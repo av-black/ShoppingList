@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ShoppingItem: Identifiable {
+struct ShoppingItem: Identifiable, Hashable {
     let id: UUID
     var title: String
     var amount: Double

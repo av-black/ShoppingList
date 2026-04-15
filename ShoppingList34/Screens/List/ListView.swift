@@ -10,6 +10,7 @@ import SwiftUI
 struct ListView: View {
     let items: [ListItem]
     let onCreateTap: () -> Void
+    let onItemTap: (ListItem) -> Void
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -50,12 +51,17 @@ private extension ListView {
     var listContent: some View {
         List {
             ForEach(items) { item in
-                ListViewCell(listItem: item)
-                    .listRowInsets(EdgeInsets())
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.clear)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 6)
+                Button {
+                    onItemTap(item)
+                } label: {
+                    ListViewCell(listItem: item)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 6)
+                }
+                .buttonStyle(.plain)
+                .listRowInsets(EdgeInsets())
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
             }
         }
         .listStyle(.plain)
@@ -91,11 +97,19 @@ private extension ListView {
 // MARK: - Preview
 
 #Preview("Пустой") {
-    ListView(items: [], onCreateTap: {})
-        .environment(ThemeStore())
+    ListView(
+        items: [],
+        onCreateTap: {},
+        onItemTap: { _ in }
+    )
+    .environment(ThemeStore())
 }
 
 #Preview("С данными") {
-    ListView(items: ListItem.mocks, onCreateTap: {})
-        .environment(ThemeStore())
+    ListView(
+        items: ListItem.mocks,
+        onCreateTap: {},
+        onItemTap: { _ in }
+    )
+    .environment(ThemeStore())
 }

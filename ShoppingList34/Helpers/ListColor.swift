@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum ListColor: String, CaseIterable, Identifiable {
+enum ListColor: String, CaseIterable, Identifiable, Hashable {
     case blue = "BlueSelectionSL"
     case green = "GreenSelectionSL"
     case purple = "PurpleSelectionSL"

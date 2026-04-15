@@ -16,7 +16,7 @@ struct ShoppingList34App: App {
         WindowGroup {
             Group {
                 if appState.hasLaunchedBefore {
-                    ContentView()
+                    AppNavigationView()
                 } else {
                     WelcomeView(onStart: appState.completeOnboarding)
                 }
