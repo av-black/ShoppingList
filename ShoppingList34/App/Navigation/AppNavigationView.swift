@@ -71,7 +71,18 @@ private extension AppNavigationView {
     }
     
     private func shoppingItemsScreen(entity: ListItemEntity) -> some View {
-        ShoppingItemsView(entity: entity)
+        ShoppingItemsView(
+            entity: entity,
+            onBackTap: {
+                router.pop()
+            },
+            onCreateItemTap: {
+                router.showModal(.createShoppingItem)
+            },
+            onEditItemTap: { item in
+                router.showModal(.editShoppingItem(item: item))
+            }
+        )
     }
     
     private func listCreationScreen(mode: ListCreationModel) -> some View {

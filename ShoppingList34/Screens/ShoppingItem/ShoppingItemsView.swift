@@ -11,38 +11,26 @@ import SwiftData
 struct ShoppingItemsView: View {
     let entity: ListItemEntity
     
+    let onBackTap: () -> Void
+    let onCreateItemTap: () -> Void
+    let onEditItemTap: (ShoppingItemEntity) -> Void
+    
     var shoppingItems: [ShoppingItem] {
         entity.items.map { $0.toModel() }
     }
     
     var filteredItems: [ShoppingItem] {
-        let items: [ShoppingItem]
-        if searchText.trimmingCharacters(in: .whitespaces).isEmpty {
-            items = shoppingItems
-        } else {
-            items = shoppingItems.filter {
-                $0.title.localizedCaseInsensitiveContains(searchText)
-            }
-        }
-        return isSorted ? items.sorted { $0.title < $1.title } : items
+        observed.filteredItems(from: shoppingItems)
     }
     
     var title: String {
         entity.toModel().title
     }
     
-    @State private var isSorted = false
     @State private var isSharePresented = false
-    @State private var searchText = ""
     @State private var activeAlert: ShoppingItemsAlert?
-    
-    private var shareText: String {
-        shoppingItems
-            .map { "• \($0.title) — \($0.formattedAmount) \($0.type.rawValue)." }
-            .joined(separator: "\n")
-    }
-    @Environment(NavigationRouter.self) private var router
-    
+    @State private var observed = Observed()
+        
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack(spacing: 0) {
@@ -63,7 +51,7 @@ struct ShoppingItemsView: View {
         .background(.grayMainBackgroundSL)
         .navigationBarBackButtonHidden(true)
         .sheet(isPresented: $isSharePresented) {
-            ShareSheet(items: [shareText])
+            ShareSheet(items: [observed.shareText(from: shoppingItems)])
         }
         .alert(item: $activeAlert) { alert in
             makeAlert(for: alert)
@@ -80,7 +68,7 @@ private extension ShoppingItemsView {
     var navigationBar: some View {
         HStack(spacing: 8) {
             Button {
-                router.pop()
+                onBackTap()
             } label: {
                 AppIcon.back.image
                     .foregroundStyle(.blackIconSL)
@@ -95,7 +83,7 @@ private extension ShoppingItemsView {
             Spacer()
 
             ShoppingItemOptionsMenu(
-                onSortTap: { isSorted.toggle() },
+                onSortTap: { observed.isSorted.toggle() },
                 onShareTap: { isSharePresented = true },
                 onResetTap: {
                     resetCompletedItems()
@@ -120,7 +108,7 @@ private extension ShoppingItemsView {
             
             TextField(
                 "",
-                text: $searchText,
+                text: $observed.searchText,
                 prompt: Text(Constants.promptText)
                     .foregroundStyle(.grayHintUniversalSL)
                     .font(AppFont.body)
@@ -172,9 +160,7 @@ private extension ShoppingItemsView {
     }
     
     private func toggle(_ item: ShoppingItem) {
-        guard let entity = entity.items.first(where: { $0.id == item.id }) else { return }
-        
-        entity.isCompleted.toggle()
+        observed.toggle(item, in: entity)
     }
     
     private func makeAlert(for alert: ShoppingItemsAlert) -> Alert {
@@ -207,23 +193,15 @@ private extension ShoppingItemsView {
     }
     
     private func delete(_ item: ShoppingItem) {
-        guard let index = entity.items.firstIndex(where: { $0.id == item.id }) else { return }
-        
-        entity.items.remove(at: index)
+        observed.delete(item, in: entity)
     }
     
     private func resetCompletedItems() {
-        entity.items.forEach { item in
-            item.isCompleted = false
-        }
+        observed.resetCompletedItems(in: entity)
     }
     
     private func deleteCompletedItems() {
-        let completedItems = shoppingItems.filter { $0.isComplete }
-        
-        completedItems.forEach { item in
-            delete(item)
-        }
+        observed.deleteCompletedItems(from: shoppingItems, in: entity)
     }
     
     // MARK: - Empty State
@@ -237,8 +215,8 @@ private extension ShoppingItemsView {
     
     func editSwipeAction(for item: ShoppingItem) -> some View {
         Button {
-            guard let entityItem = entity.items.first(where: { $0.id == item.id }) else { return }
-            router.showModal(.editShoppingItem(item: entityItem))
+            guard let entityItem = observed.entityItem(for: item, in: entity) else { return }
+            onEditItemTap(entityItem)
         } label: {
             AppIcon.edit.image
                 .font(AppFont.body)
@@ -265,7 +243,7 @@ private extension ShoppingItemsView {
             title: Constants.buttonText,
             isActive: true,
             action: {
-                router.showModal(.createShoppingItem)
+                onCreateItemTap()
             }
         )
         .padding(.horizontal, 16)
@@ -325,10 +303,14 @@ private enum ShoppingItemsAlert: Identifiable {
     context.insert(entity)
 
     return NavigationStack {
-        ShoppingItemsView(entity: entity)
+        ShoppingItemsView(
+            entity: entity,
+            onBackTap: {},
+            onCreateItemTap: {},
+            onEditItemTap: { _ in }
+        )
     }
     .modelContainer(container)
-    .environment(NavigationRouter())
 }
 
 #Preview("Пустой") {
@@ -345,8 +327,12 @@ private enum ShoppingItemsAlert: Identifiable {
     )
 
     return NavigationStack {
-        ShoppingItemsView(entity: entity)
+        ShoppingItemsView(
+            entity: entity,
+            onBackTap: {},
+            onCreateItemTap: {},
+            onEditItemTap: { _ in }
+        )
     }
     .modelContainer(container)
-    .environment(NavigationRouter())
 }
