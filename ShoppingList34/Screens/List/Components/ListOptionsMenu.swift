@@ -10,10 +10,10 @@ import SwiftUI
 struct ListOptionsMenu: View {
     @Environment(ThemeStore.self) private var themeStore
     let onSortTap: () -> Void
-
+    
     @State private var isPresented = false
     @State private var isExpanded = false
-
+    
     var body: some View {
         MoreButton {
             isPresented.toggle()
@@ -38,26 +38,31 @@ private extension ListOptionsMenu {
     var content: some View {
         VStack(spacing: 0) {
             themeRow
-
-            separator
-
             if isExpanded {
-                themeList
                 separator
+                themeList
+            } else {
+                rootSeparator
+                sortRow
             }
-
-            sortRow
         }
         .frame(width: 250)
+        .fixedSize(horizontal: true, vertical: true)
         .background(Color.grayCardBackgroundSL)
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .shadow(color: .black.opacity(0.12), radius: 16, x: 0, y: 6)
     }
-
+    
     var separator: some View {
         Rectangle()
             .fill(Color.graySeparatorSL)
             .frame(height: 0.5)
+    }
+    
+    var rootSeparator: some View {
+        Rectangle()
+            .fill(.grayWideSeparatorSL)
+            .frame(height: 8)
     }
 }
 
@@ -77,7 +82,7 @@ private extension ListOptionsMenu {
             }
         }
     }
-
+    
     var sortRow: some View {
         MenuRow(
             title: MenuTitle.sort,
@@ -100,7 +105,7 @@ private extension ListOptionsMenu {
             ForEach(AppTheme.allCases) { theme in
                 Button {
                     themeStore.setTheme(theme)
-
+                    
                     withAnimation(.easeInOut(duration: 0.2)) {
                         isExpanded = false
                         isPresented = false
@@ -117,11 +122,11 @@ private extension ListOptionsMenu {
                             }
                         }
                         .frame(width: 20)
-
+                        
                         Text(theme.title)
                             .font(AppFont.body)
                             .foregroundStyle(.blackSettingsTextSL)
-
+                        
                         Spacer()
                     }
                     .padding(.horizontal, 16)
@@ -129,7 +134,7 @@ private extension ListOptionsMenu {
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
-
+                
                 if theme.id != AppTheme.allCases.last?.id {
                     separator
                 }
@@ -146,14 +151,16 @@ struct MenuRow<RightIcon: View>: View {
     let rightIcon: RightIcon?
     let isMultiline: Bool
     let titleFont: Font
+    let color: Color
     let action: () -> Void
-
+    
     init(
         title: String,
         leftSystemIcon: String? = nil,
         rightIcon: RightIcon? = nil,
         isMultiline: Bool = false,
         titleFont: Font = AppFont.body,
+        color: Color = .blackSettingsTextSL,
         action: @escaping () -> Void
     ) {
         self.title = title
@@ -161,31 +168,30 @@ struct MenuRow<RightIcon: View>: View {
         self.rightIcon = rightIcon
         self.isMultiline = isMultiline
         self.titleFont = titleFont
+        self.color = color
         self.action = action
     }
-
+    
     var body: some View {
         Button(action: action) {
             HStack(spacing: 12) {
                 if let leftSystemIcon {
                     Image(systemName: leftSystemIcon)
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundStyle(.blackSettingsTextSL)
+                        .font(.system(size: 18, weight: .semibold))                     .foregroundColor(color)
                         .frame(width: 20)
                 }
-
+                
                 Text(title)
                     .font(titleFont)
-                    .foregroundStyle(.blackSettingsTextSL)
+                    .foregroundColor(color)
                     .multilineTextAlignment(.leading)
                     .lineLimit(isMultiline ? 2 : 1)
                     .fixedSize(horizontal: false, vertical: true)
-
+                
                 Spacer(minLength: 8)
-
+                
                 rightIcon
-                    .font(.system(size: 21, weight: .regular))
-                    .foregroundStyle(.blackSettingsTextSL)
+                    .font(.system(size: 21, weight: .regular))                    .foregroundColor(color)
                     .frame(width: 24, height: 24)
             }
             .padding(.horizontal, 16)
@@ -193,7 +199,7 @@ struct MenuRow<RightIcon: View>: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .tint(.blackSettingsTextSL)
+        .tint(color)
     }
 }
 

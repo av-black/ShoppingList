@@ -16,20 +16,29 @@ struct ShoppingItemsView: View {
     }
     
     var filteredItems: [ShoppingItem] {
+        let items: [ShoppingItem]
         if searchText.trimmingCharacters(in: .whitespaces).isEmpty {
-            return shoppingItems
+            items = shoppingItems
+        } else {
+            items = shoppingItems.filter {
+                $0.title.localizedCaseInsensitiveContains(searchText)
+            }
         }
-        
-        return shoppingItems.filter {
-            $0.title.localizedCaseInsensitiveContains(searchText)
-        }
+        return isSorted ? items.sorted { $0.title < $1.title } : items
     }
     
     var title: String {
         entity.toModel().title
     }
     
+    @State private var isSorted = false
+    @State private var isSharePresented = false
     @State private var searchText = ""
+    private var shareText: String {
+        shoppingItems
+            .map { "• \($0.title) — \($0.formattedAmount) \($0.type.rawValue)." }
+            .joined(separator: "\n")
+    }
     @Environment(NavigationRouter.self) private var router
     
     var body: some View {
@@ -51,6 +60,9 @@ struct ShoppingItemsView: View {
         }
         .background(.grayMainBackgroundSL)
         .navigationBarBackButtonHidden(true)
+        .sheet(isPresented: $isSharePresented) {
+            ShareSheet(items: [shareText])
+        }
         .toolbar(.hidden, for: .navigationBar)
     }
 }
@@ -61,13 +73,32 @@ private extension ShoppingItemsView {
     // MARK: - Navigation Bar
     
     var navigationBar: some View {
-        CustomNavigationBar(
-            title: title,
-            onBackTap: {
+        HStack(spacing: 8) {
+            Button {
                 router.pop()
-            },
-            onMoreTap: {}
-        )
+            } label: {
+                AppIcon.back.image
+                    .foregroundStyle(.blackIconSL)
+                    .font(AppFont.sectionTitle)
+                    .frame(width: 28, height: 28)
+            }
+
+            Text(title)
+                .font(AppFont.headline)
+                .foregroundStyle(.blackTitleSL)
+
+            Spacer()
+
+            ShoppingItemOptionsMenu(
+                onSortTap: { isSorted.toggle() },
+                onShareTap: { isSharePresented = true },
+                onResetTap: {},
+                onDeleteCompletedTap: {}
+            )
+        }
+        .padding(.vertical, 11)
+        .padding(.horizontal, 16)
+        .frame(height: 44)
     }
     
     // MARK: - Search
