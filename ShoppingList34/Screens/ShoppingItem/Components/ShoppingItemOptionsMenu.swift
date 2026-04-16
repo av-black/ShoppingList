@@ -96,7 +96,7 @@ private extension ShoppingItemOptionsMenu {
             isMultiline: true,
             titleFont: AppFont.body
         ) {
-            // TODO: реализовать после добавления бизнес-логики
+            onResetTap()
             isPresented = false
         }
     }
@@ -109,7 +109,7 @@ private extension ShoppingItemOptionsMenu {
             titleFont: AppFont.body,
             color: .redSL,
         ) {
-            // TODO: реализовать после добавления бизнес-логики
+            onDeleteCompletedTap()
             isPresented = false
         }
     }
