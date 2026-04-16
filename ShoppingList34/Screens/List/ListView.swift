@@ -11,10 +11,18 @@ import SwiftData
 struct ListView: View {
     @Query
     private var entities: [ListItemEntity]
+    private var sortedEntities: [ListItemEntity] {
+        entities.sorted {
+            isSortedAscending
+            ? $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending
+            : $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedDescending
+        }
+    }
     @Environment(NavigationRouter.self)
     private var router
     @Environment(\.modelContext)
     private var context
+    @State private var isSortedAscending = true
     
     let onCreateTap: () -> Void
     let onItemTap: (ListItemEntity) -> Void
@@ -57,7 +65,7 @@ private extension ListView {
     
     var listContent: some View {
         List {
-            ForEach(entities) { entity in
+            ForEach(sortedEntities) { entity in
                 Button {
                     onItemTap(entity)
                 } label: {
@@ -76,6 +84,7 @@ private extension ListView {
                 .listRowBackground(Color.clear)
             }
         }
+        
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
         .safeAreaInset(edge: .bottom) {
@@ -94,7 +103,7 @@ private extension ListView {
     }
     
     func handleSortTap() {
-        // TODO: - Add Sort function
+        isSortedAscending.toggle()
     }
     
     func deleteAction(for entity: ListItemEntity) -> some View {
