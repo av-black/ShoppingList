@@ -34,6 +34,8 @@ struct ShoppingItemsView: View {
     @State private var isSorted = false
     @State private var isSharePresented = false
     @State private var searchText = ""
+    @State private var activeAlert: ShoppingItemsAlert?
+    
     private var shareText: String {
         shoppingItems
             .map { "• \($0.title) — \($0.formattedAmount) \($0.type.rawValue)." }
@@ -62,6 +64,9 @@ struct ShoppingItemsView: View {
         .navigationBarBackButtonHidden(true)
         .sheet(isPresented: $isSharePresented) {
             ShareSheet(items: [shareText])
+        }
+        .alert(item: $activeAlert) { alert in
+            makeAlert(for: alert)
         }
         .toolbar(.hidden, for: .navigationBar)
     }
@@ -96,7 +101,7 @@ private extension ShoppingItemsView {
                     resetCompletedItems()
                 },
                 onDeleteCompletedTap: {
-                    deleteCompletedItems()
+                    activeAlert = .deleteCompleted
                 }
             )
         }
@@ -172,6 +177,35 @@ private extension ShoppingItemsView {
         entity.isCompleted.toggle()
     }
     
+    private func makeAlert(for alert: ShoppingItemsAlert) -> Alert {
+        switch alert {
+        case let .deleteItem(item):
+            return Alert(
+                title: Text(Constants.deleteItemAlertTitle),
+                message: Text(Constants.deleteItemAlertMessage),
+                primaryButton: .cancel(Text(Constants.cancelButtonTitle)),
+                secondaryButton: .destructive(
+                    Text(Constants.deleteButtonTitle),
+                    action: {
+                        delete(item)
+                    }
+                )
+            )
+        case .deleteCompleted:
+            return Alert(
+                title: Text(Constants.deleteCompletedAlertTitle),
+                message: Text(Constants.deleteCompletedAlertMessage),
+                primaryButton: .cancel(Text(Constants.cancelButtonTitle)),
+                secondaryButton: .destructive(
+                    Text(Constants.deleteButtonTitle),
+                    action: {
+                        deleteCompletedItems()
+                    }
+                )
+            )
+        }
+    }
+    
     private func delete(_ item: ShoppingItem) {
         guard let index = entity.items.firstIndex(where: { $0.id == item.id }) else { return }
         
@@ -215,7 +249,7 @@ private extension ShoppingItemsView {
     
     func deleteSwipeAction(for item: ShoppingItem) -> some View {
         Button {
-            delete(item)
+            activeAlert = .deleteItem(item)
         } label: {
             AppIcon.trashSL.image
                 .font(AppFont.body)
@@ -245,6 +279,26 @@ private extension ShoppingItemsView {
     enum Constants {
         static let promptText = "Поиск"
         static let buttonText = "Добавить товар"
+        static let deleteItemAlertTitle = "Удаление товара"
+        static let deleteItemAlertMessage = "Вы действительно хотите удалить товар?"
+        static let deleteCompletedAlertTitle = "Удаление купленных товаров"
+        static let deleteCompletedAlertMessage = "Вы действительно хотите удалить все купленные товары?"
+        static let cancelButtonTitle = "Отменить"
+        static let deleteButtonTitle = "Удалить"
+    }
+}
+
+private enum ShoppingItemsAlert: Identifiable {
+    case deleteItem(ShoppingItem)
+    case deleteCompleted
+
+    var id: String {
+        switch self {
+        case let .deleteItem(item):
+            return "delete-item-\(item.id.uuidString)"
+        case .deleteCompleted:
+            return "delete-completed"
+        }
     }
 }
 
