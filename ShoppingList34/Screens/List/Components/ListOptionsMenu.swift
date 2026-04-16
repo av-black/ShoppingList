@@ -38,17 +38,16 @@ private extension ListOptionsMenu {
     var content: some View {
         VStack(spacing: 0) {
             themeRow
-
-            separator
-
             if isExpanded {
-                themeList
                 separator
+                themeList
+            } else {
+                rootSeparator
+                sortRow
             }
-
-            sortRow
         }
         .frame(width: 250)
+        .fixedSize(horizontal: true, vertical: true)
         .background(Color.grayCardBackgroundSL)
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .shadow(color: .black.opacity(0.12), radius: 16, x: 0, y: 6)
@@ -58,6 +57,12 @@ private extension ListOptionsMenu {
         Rectangle()
             .fill(Color.graySeparatorSL)
             .frame(height: 0.5)
+    }
+    
+    var rootSeparator: some View {
+        Rectangle()
+            .fill(.grayWideSeparatorSL)
+            .frame(height: 8)
     }
 }
 
