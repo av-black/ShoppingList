@@ -104,6 +104,7 @@ private extension AppNavigationView {
     
     private func createShoppingItemModal() -> some View {
         ShoppingItemFormView(
+            existingItems: currentShoppingItems,
             isEditing: false,
             onSave: { name, amount, unit in
                 
@@ -134,6 +135,7 @@ private extension AppNavigationView {
     private func editShoppingItemModal(item: ShoppingItemEntity) -> some View {
         ShoppingItemFormView(
             item: item.toModel(),
+            existingItems: currentShoppingItems,
             isEditing: true,
             onSave: { name, amount, unit in
                 item.title = name
@@ -144,5 +146,12 @@ private extension AppNavigationView {
             }
         )
         .environment(router)
+    }
+
+    private var currentShoppingItems: [ShoppingItem] {
+        guard case let .shoppingItemsScreen(entity) = router.path.last else {
+            return []
+        }
+        return entity.items.map { $0.toModel() }
     }
 }
