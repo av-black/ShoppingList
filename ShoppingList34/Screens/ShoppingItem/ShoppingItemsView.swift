@@ -92,8 +92,12 @@ private extension ShoppingItemsView {
             ShoppingItemOptionsMenu(
                 onSortTap: { isSorted.toggle() },
                 onShareTap: { isSharePresented = true },
-                onResetTap: {},
-                onDeleteCompletedTap: {}
+                onResetTap: {
+                    resetCompletedItems()
+                },
+                onDeleteCompletedTap: {
+                    deleteCompletedItems()
+                }
             )
         }
         .padding(.vertical, 11)
@@ -172,6 +176,20 @@ private extension ShoppingItemsView {
         guard let index = entity.items.firstIndex(where: { $0.id == item.id }) else { return }
         
         entity.items.remove(at: index)
+    }
+    
+    private func resetCompletedItems() {
+        entity.items.forEach { item in
+            item.isCompleted = false
+        }
+    }
+    
+    private func deleteCompletedItems() {
+        let completedItems = shoppingItems.filter { $0.isComplete }
+        
+        completedItems.forEach { item in
+            delete(item)
+        }
     }
     
     // MARK: - Empty State
