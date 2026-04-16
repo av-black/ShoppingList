@@ -12,12 +12,9 @@ struct ListView: View {
     @Query
     private var entities: [ListItemEntity]
     private var sortedEntities: [ListItemEntity] {
-        entities.sorted {
-            observed.isSortedAscending
-            ? $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending
-            : $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedDescending
-        }
+        observed.sortedEntities(from: entities)
     }
+    
     @Environment(\.modelContext)
     private var context
     @State private var observed = Observed()

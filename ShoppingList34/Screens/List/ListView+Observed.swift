@@ -38,5 +38,13 @@ extension ListView {
                 selectedCategory: CategoryItem(icon: model.icon)
             )
         }
+        
+        func sortedEntities(from entities: [ListItemEntity]) -> [ListItemEntity] {
+            entities.sorted {
+                isSortedAscending
+                ? $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending
+                : $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedDescending
+            }
+        }
     }
 }
