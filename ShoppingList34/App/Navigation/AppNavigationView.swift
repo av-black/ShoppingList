@@ -70,6 +70,7 @@ struct AppNavigationView: View {
             switch route {
             case .createShoppingItem:
                 ShoppingItemFormView(
+                    existingItems: currentShoppingItems,
                     isEditing: false,
                     onSave: { name, amount, unit in
                         
@@ -99,6 +100,7 @@ struct AppNavigationView: View {
             case let .editShoppingItem(item):
                 ShoppingItemFormView(
                     item: item.toModel(),
+                    existingItems: currentShoppingItems,
                     isEditing: true,
                     onSave: { name, amount, unit in
                         item.title = name
@@ -111,5 +113,12 @@ struct AppNavigationView: View {
                 .environment(router)
             }
         }
+    }
+
+    private var currentShoppingItems: [ShoppingItem] {
+        guard case let .shoppingItemsScreen(entity) = router.path.last else {
+            return []
+        }
+        return entity.items.map { $0.toModel() }
     }
 }

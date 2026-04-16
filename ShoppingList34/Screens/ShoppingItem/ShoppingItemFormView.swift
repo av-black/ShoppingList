@@ -11,15 +11,18 @@ struct ShoppingItemFormView: View {
     @Environment(NavigationRouter.self) private var router
     
     let item: ShoppingItem?
+    let existingItems: [ShoppingItem]
     var isEditing: Bool = false
     var onSave: (String, String, MeasurementType) -> Void
     
     init(
         item: ShoppingItem? = nil,
+        existingItems: [ShoppingItem] = [],
         isEditing: Bool = false,
         onSave: @escaping (String, String, MeasurementType) -> Void
     ) {
         self.item = item
+        self.existingItems = existingItems
         self.isEditing = isEditing
         self.onSave = onSave
     }
@@ -30,8 +33,24 @@ struct ShoppingItemFormView: View {
     @State private var amount = ""
     @State private var selectedUnit: MeasurementType = .piece
     
+    private var trimmedName: String {
+        name.trimmingCharacters(in: .whitespaces)
+    }
+
+    private var isDuplicate: Bool {
+        guard !trimmedName.isEmpty else { return false }
+        return existingItems.contains { existing in
+            if let item, existing.id == item.id { return false }
+            return existing.title.localizedCaseInsensitiveCompare(trimmedName) == .orderedSame
+        }
+    }
+
+    private var nameFieldState: TextFieldState {
+        isDuplicate ? .error(Constants.duplicateError) : .normal
+    }
+
     private var isDoneButtonActive: Bool {
-        !name.trimmingCharacters(in: .whitespaces).isEmpty && !amount.isEmpty
+        !trimmedName.isEmpty && !amount.isEmpty && !isDuplicate
     }
     
     // MARK: - Body
@@ -56,7 +75,7 @@ struct ShoppingItemFormView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(Constants.doneButton) {
-                        onSave(name, amount, selectedUnit)
+                        onSave(trimmedName, amount, selectedUnit)
                     }
                     .fontWeight(.semibold)
                     .disabled(!isDoneButtonActive)
@@ -81,7 +100,7 @@ private extension ShoppingItemFormView {
         BaseTextField(
             placeholder: Constants.namePlaceholder,
             text: $name,
-            state: .normal
+            state: nameFieldState
         )
     }
     
@@ -133,6 +152,7 @@ private extension ShoppingItemFormView {
         static let namePlaceholder = "Название списка"
         static let amountPlaceholder = "Количество"
         static let unitLabel = "Ед.изм.:"
+        static let duplicateError = "Этот товар уже есть в списке, добавьте другой"
     }
 }
 
@@ -140,6 +160,19 @@ private extension ShoppingItemFormView {
 
 #Preview("Создание") {
     ShoppingItemFormView(isEditing: false) { name, amount, unit in
+        print("Создано: \(name), \(amount) \(unit.rawValue)")
+    }
+    .environment(NavigationRouter())
+}
+
+#Preview("Создание с дубликатом") {
+    ShoppingItemFormView(
+        existingItems: [
+            ShoppingItem(title: "Чайник", amount: 1, type: .piece),
+            ShoppingItem(title: "Молоко", amount: 2, type: .liter)
+        ],
+        isEditing: false
+    ) { name, amount, unit in
         print("Создано: \(name), \(amount) \(unit.rawValue)")
     }
     .environment(NavigationRouter())
