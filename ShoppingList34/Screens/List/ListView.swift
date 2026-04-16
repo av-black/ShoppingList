@@ -18,8 +18,6 @@ struct ListView: View {
             : $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedDescending
         }
     }
-    @Environment(NavigationRouter.self)
-    private var router
     @Environment(\.modelContext)
     private var context
     @State private var observed = Observed()
@@ -27,6 +25,7 @@ struct ListView: View {
     
     let onCreateTap: () -> Void
     let onItemTap: (ListItemEntity) -> Void
+    let onEditTap: (ListCreationModel) -> Void
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -166,10 +165,7 @@ private extension ListView {
     
     func handleEdit(_ entity: ListItemEntity) {
         let mode = observed.makeEditMode(from: entity)
-        
-        router.push(
-                .listCreationScreen(mode: mode)
-            )
+        onEditTap(mode)
     }
     
     func handleDuplicate(_ entity: ListItemEntity) {
@@ -224,7 +220,8 @@ private enum ListViewAlert: Identifiable {
 #Preview("Пустой") {
     ListView(
         onCreateTap: {},
-        onItemTap: { _ in }
+        onItemTap: { _ in },
+        onEditTap: { _ in }
     )
     .environment(ThemeStore())
 }
@@ -232,7 +229,8 @@ private enum ListViewAlert: Identifiable {
 #Preview("С данными") {
     ListView(
         onCreateTap: {},
-        onItemTap: { _ in }
+        onItemTap: { _ in },
+        onEditTap: { _ in }
     )
     .modelContainer(PreviewContainer.container)
     .environment(ThemeStore())

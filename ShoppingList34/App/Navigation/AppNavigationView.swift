@@ -41,6 +41,9 @@ private extension AppNavigationView {
             },
             onItemTap: { entity in
                 router.push(.shoppingItemsScreen(entity: entity))
+            },
+            onEditTap: { mode in
+                router.push(.listCreationScreen(mode: mode))
             }
         )
     }
