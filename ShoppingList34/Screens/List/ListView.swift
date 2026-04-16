@@ -23,6 +23,7 @@ struct ListView: View {
     @Environment(\.modelContext)
     private var context
     @State private var isSortedAscending = true
+    @State private var activeAlert: ListViewAlert?
     
     let onCreateTap: () -> Void
     let onItemTap: (ListItemEntity) -> Void
@@ -40,6 +41,9 @@ struct ListView: View {
             createButton
         }
         .background(.grayMainBackgroundSL)
+        .alert(item: $activeAlert) { alert in
+            makeAlert(for: alert)
+        }
     }
 }
 
@@ -108,7 +112,7 @@ private extension ListView {
     
     func deleteAction(for entity: ListItemEntity) -> some View {
         Button {
-            handleDelete(entity)
+            activeAlert = .deleteList(entity)
         } label: {
             AppIcon.trash.image
                 .font(AppFont.body)
@@ -137,6 +141,23 @@ private extension ListView {
                 .foregroundStyle(.whiteUniversalSL)
         }
         .tint(.orangeDuplicateSL)
+    }
+    
+    func makeAlert(for alert: ListViewAlert) -> Alert {
+        switch alert {
+        case let .deleteList(entity):
+            return Alert(
+                title: Text(Constants.deleteListAlertTitle),
+                message: Text(Constants.deleteListAlertMessage),
+                primaryButton: .cancel(Text(Constants.cancelButtonTitle)),
+                secondaryButton: .destructive(
+                    Text(Constants.deleteButtonTitle),
+                    action: {
+                        handleDelete(entity)
+                    }
+                )
+            )
+        }
     }
     
     func handleDelete(_ entity: ListItemEntity) {
@@ -171,6 +192,10 @@ private extension ListView {
     enum Constants {
         static let title = "Мои списки"
         static let buttonTitle = "Создать список"
+        static let deleteListAlertTitle = "Удаление списка"
+        static let deleteListAlertMessage = "Вы действительно хотите удалить список?"
+        static let cancelButtonTitle = "Отменить"
+        static let deleteButtonTitle = "Удалить"
     }
 }
 
@@ -192,6 +217,17 @@ enum PreviewContainer {
         
         return container
     }()
+}
+
+private enum ListViewAlert: Identifiable {
+    case deleteList(ListItemEntity)
+
+    var id: UUID {
+        switch self {
+        case let .deleteList(entity):
+            return entity.id
+        }
+    }
 }
 
 #Preview("Пустой") {
