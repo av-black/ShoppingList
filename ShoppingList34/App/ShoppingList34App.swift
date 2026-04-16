@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct ShoppingList34App: App {
@@ -24,5 +25,9 @@ struct ShoppingList34App: App {
             .environment(themeStore)
             .preferredColorScheme(themeStore.selectedTheme.colorScheme)
         }
+        .modelContainer(for: [
+            ListItemEntity.self,
+            ShoppingItemEntity.self
+        ])
     }
 }

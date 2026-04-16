@@ -10,7 +10,7 @@ import Foundation
 /// Маршруты модальной навигации приложения.
 enum ModalRoute: Hashable, Identifiable {
     case createShoppingItem
-    case editShoppingItem(item: ShoppingItem)
+    case editShoppingItem(item: ShoppingItemEntity)
     
     var id: String {
         switch self {

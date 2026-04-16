@@ -6,17 +6,32 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ListView: View {
-    let items: [ListItem]
+    @Query
+    private var entities: [ListItemEntity]
+    private var sortedEntities: [ListItemEntity] {
+        entities.sorted {
+            isSortedAscending
+            ? $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending
+            : $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedDescending
+        }
+    }
+    @Environment(NavigationRouter.self)
+    private var router
+    @Environment(\.modelContext)
+    private var context
+    @State private var isSortedAscending = true
+    
     let onCreateTap: () -> Void
-    let onItemTap: (ListItem) -> Void
-
+    let onItemTap: (ListItemEntity) -> Void
+    
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack(spacing: 0) {
                 header
-                if items.isEmpty {
+                if entities.isEmpty {
                     emptyState
                 } else {
                     listContent
@@ -42,35 +57,41 @@ private extension ListView {
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
     }
-
+    
     var emptyState: some View {
         NoListsPlaceholderView()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
-
+    
     var listContent: some View {
         List {
-            ForEach(items) { item in
+            ForEach(sortedEntities) { entity in
                 Button {
-                    onItemTap(item)
+                    onItemTap(entity)
                 } label: {
-                    ListViewCell(listItem: item)
+                    ListViewCell(listItem: entity.toModel())
                         .padding(.horizontal, 16)
                         .padding(.vertical, 6)
                 }
                 .buttonStyle(.plain)
+                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                    deleteAction(for: entity)
+                    duplicateAction(for: entity)
+                    editAction(for: entity)
+                }
                 .listRowInsets(EdgeInsets())
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
             }
         }
+        
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
         .safeAreaInset(edge: .bottom) {
             Color.clear.frame(height: 80)
         }
     }
-
+    
     var createButton: some View {
         BaseButton(
             title: Constants.buttonTitle,
@@ -82,7 +103,65 @@ private extension ListView {
     }
     
     func handleSortTap() {
-        // TODO: - Add Sort function
+        isSortedAscending.toggle()
+    }
+    
+    func deleteAction(for entity: ListItemEntity) -> some View {
+        Button {
+            handleDelete(entity)
+        } label: {
+            AppIcon.trash.image
+                .font(AppFont.body)
+                .foregroundStyle(.whiteUniversalSL)
+        }
+        .tint(.redSL)
+    }
+    
+    func editAction(for entity: ListItemEntity) -> some View {
+        Button {
+            handleEdit(entity)
+        } label: {
+            AppIcon.edit.image
+                .font(AppFont.body)
+                .foregroundStyle(.whiteUniversalSL)
+        }
+        .tint(.gray)
+    }
+    
+    func duplicateAction(for entity: ListItemEntity) -> some View {
+        Button {
+            handleDuplicate(entity)
+        } label: {
+            AppIcon.duplicate.image
+                .font(AppFont.body)
+                .foregroundStyle(.whiteUniversalSL)
+        }
+        .tint(.orangeDuplicateSL)
+    }
+    
+    func handleDelete(_ entity: ListItemEntity) {
+        context.delete(entity)
+    }
+    
+    func handleEdit(_ entity: ListItemEntity) {
+        let model = entity.toModel()
+        
+        router.push(
+            .listCreationScreen(
+                mode: .edit(
+                    id: model.id,
+                    title: model.title,
+                    selectedColor: model.designColor,
+                    selectedCategory: CategoryItem(icon: model.icon)
+                )
+            )
+        )
+    }
+    
+    func handleDuplicate(_ entity: ListItemEntity) {
+        let newItem = ListDuplicateHelper.makeCopy(from: entity.toModel(), in: context)
+        
+        context.insert(newItem.toEntity())
     }
 }
 
@@ -97,9 +176,26 @@ private extension ListView {
 
 // MARK: - Preview
 
+enum PreviewContainer {
+    static let container: ModelContainer = {
+        // swiftlint:disable:next force_try
+        let container = try! ModelContainer(
+            for: ListItemEntity.self,
+            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+        )
+        
+        let context = container.mainContext
+        
+        ListItem.mocks.forEach {
+            context.insert($0.toEntity())
+        }
+        
+        return container
+    }()
+}
+
 #Preview("Пустой") {
     ListView(
-        items: [],
         onCreateTap: {},
         onItemTap: { _ in }
     )
@@ -108,9 +204,9 @@ private extension ListView {
 
 #Preview("С данными") {
     ListView(
-        items: ListItem.mocks,
         onCreateTap: {},
         onItemTap: { _ in }
     )
+    .modelContainer(PreviewContainer.container)
     .environment(ThemeStore())
 }

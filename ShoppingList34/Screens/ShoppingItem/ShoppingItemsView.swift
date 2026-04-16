@@ -6,10 +6,28 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ShoppingItemsView: View {
-    let title: String
-    let shoppingItems: [ShoppingItem]
+    let entity: ListItemEntity
+    
+    var shoppingItems: [ShoppingItem] {
+        entity.items.map { $0.toModel() }
+    }
+    
+    var filteredItems: [ShoppingItem] {
+        if searchText.trimmingCharacters(in: .whitespaces).isEmpty {
+            return shoppingItems
+        }
+        
+        return shoppingItems.filter {
+            $0.title.localizedCaseInsensitiveContains(searchText)
+        }
+    }
+    
+    var title: String {
+        entity.toModel().title
+    }
     
     @State private var searchText = ""
     @Environment(NavigationRouter.self) private var router
@@ -79,7 +97,7 @@ private extension ShoppingItemsView {
     
     var itemsList: some View {
         List {
-            ForEach(shoppingItems) { item in
+            ForEach(filteredItems) { item in
                 shoppingItemRow(for: item)
                     .listRowInsets(EdgeInsets())
                     .listRowBackground(Color.clear)
@@ -97,7 +115,9 @@ private extension ShoppingItemsView {
         VStack(spacing: 0) {
             ShoppingItemViewCell(
                 shoppingItem: item,
-                onCheckboxTap: {}
+                onCheckboxTap: {
+                    toggle(item)
+                }
             )
             
             Divider()
@@ -106,9 +126,21 @@ private extension ShoppingItemsView {
                 .background(Color.graySeparatorSL)
         }
         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-            deleteSwipeAction
+            deleteSwipeAction(for: item)
             editSwipeAction(for: item)
         }
+    }
+    
+    private func toggle(_ item: ShoppingItem) {
+        guard let entity = entity.items.first(where: { $0.id == item.id }) else { return }
+        
+        entity.isCompleted.toggle()
+    }
+    
+    private func delete(_ item: ShoppingItem) {
+        guard let index = entity.items.firstIndex(where: { $0.id == item.id }) else { return }
+        
+        entity.items.remove(at: index)
     }
     
     // MARK: - Empty State
@@ -122,7 +154,8 @@ private extension ShoppingItemsView {
     
     func editSwipeAction(for item: ShoppingItem) -> some View {
         Button {
-            router.showModal(.editShoppingItem(item: item))
+            guard let entityItem = entity.items.first(where: { $0.id == item.id }) else { return }
+            router.showModal(.editShoppingItem(item: entityItem))
         } label: {
             AppIcon.edit.image
                 .font(AppFont.body)
@@ -131,9 +164,9 @@ private extension ShoppingItemsView {
         .tint(.grayEditSL)
     }
     
-    var deleteSwipeAction: some View {
+    func deleteSwipeAction(for item: ShoppingItem) -> some View {
         Button {
-            print("Delete tapped")
+            delete(item)
         } label: {
             AppIcon.trashSL.image
                 .font(AppFont.body)
@@ -167,21 +200,50 @@ private extension ShoppingItemsView {
 }
 
 #Preview("С данными") {
-    NavigationStack {
-        ShoppingItemsView(
-            title: ListItem.mock.title,
-            shoppingItems: ListItem.mock.shoppingItem
-        )
+    // swiftlint:disable:next force_try
+    let container = try! ModelContainer(
+        for: ListItemEntity.self, ShoppingItemEntity.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
+
+    let context = container.mainContext
+
+    let entity = ListItemEntity(
+        title: "Новый год",
+        color: "blue",
+        icon: "gift"
+    )
+
+    entity.items = [
+        ShoppingItemEntity(title: "Молоко", amount: 1, type: "liter", list: entity),
+        ShoppingItemEntity(title: "Хлеб", amount: 2, type: "piece", list: entity)
+    ]
+
+    context.insert(entity)
+
+    return NavigationStack {
+        ShoppingItemsView(entity: entity)
     }
+    .modelContainer(container)
     .environment(NavigationRouter())
 }
 
 #Preview("Пустой") {
-    NavigationStack {
-        ShoppingItemsView(
-            title: ListItem.mock.title,
-            shoppingItems: []
-        )
+    // swiftlint:disable:next force_try
+    let container = try! ModelContainer(
+        for: ListItemEntity.self, ShoppingItemEntity.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
+
+    let entity = ListItemEntity(
+        title: "Пустой список",
+        color: "gray",
+        icon: "cart"
+    )
+
+    return NavigationStack {
+        ShoppingItemsView(entity: entity)
     }
+    .modelContainer(container)
     .environment(NavigationRouter())
 }

@@ -14,6 +14,7 @@ extension ListCreationView {
         let mode: ListCreationModel
         let items: [CategoryItem]
         
+        var id: UUID?
         var title: String
         var selectedColor: ListColor
         var selectedCategory: CategoryItem
@@ -27,18 +28,20 @@ extension ListCreationView {
             
             switch mode {
             case .create:
+                id = nil
                 title = ""
                 selectedColor = .blue
                 selectedCategory = items.first ?? CategoryItem(icon: .cart)
                 
-            case let .edit(
-                title,
-                selectedColor,
-                selectedCategory
-            ):
+            case let .edit(id, title, selectedColor, selectedCategory):
+                self.id = id
                 self.title = title
                 self.selectedColor = selectedColor
-                self.selectedCategory = selectedCategory
+                
+                self.selectedCategory =
+                items.first(where: { $0.icon == selectedCategory.icon })
+                ?? items.first
+                ?? CategoryItem(icon: .cart)
             }
         }
         
@@ -65,16 +68,24 @@ extension ListCreationView {
         }
         
         func handlePrimaryButtonTap(
-            onCreateTap: () -> Void,
-            onSaveTap: () -> Void
+            onCreateTap: (ListItem) -> Void,
+            onSaveTap: (ListItem) -> Void
         ) {
             guard isButtonActive else { return }
             
+            let item = ListItem(
+                id: id ?? UUID(),
+                title: title,
+                designColor: selectedColor,
+                icon: selectedCategory.icon,
+                shoppingItem: []
+            )
+            
             switch mode {
             case .create:
-                handleCreateList(onCreateTap: onCreateTap)
+                onCreateTap(item)
             case .edit:
-                handleSaveList(onSaveTap: onSaveTap)
+                onSaveTap(item)
             }
         }
     }
