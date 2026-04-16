@@ -8,50 +8,30 @@
 import SwiftUI
 
 struct ShoppingItemFormView: View {
-    @Environment(NavigationRouter.self) private var router
-    
     let item: ShoppingItem?
     let existingItems: [ShoppingItem]
+    
     var isEditing: Bool = false
     var onSave: (String, String, MeasurementType) -> Void
+    var onDismiss: () -> Void
     
     init(
         item: ShoppingItem? = nil,
         existingItems: [ShoppingItem] = [],
         isEditing: Bool = false,
+        onDismiss: @escaping () -> Void,
         onSave: @escaping (String, String, MeasurementType) -> Void
     ) {
         self.item = item
         self.existingItems = existingItems
         self.isEditing = isEditing
+        self.onDismiss = onDismiss
         self.onSave = onSave
     }
     
     // MARK: - Состояние полей формы
     
-    @State private var name = ""
-    @State private var amount = ""
-    @State private var selectedUnit: MeasurementType = .piece
-    
-    private var trimmedName: String {
-        name.trimmingCharacters(in: .whitespaces)
-    }
-
-    private var isDuplicate: Bool {
-        guard !trimmedName.isEmpty else { return false }
-        return existingItems.contains { existing in
-            if let item, existing.id == item.id { return false }
-            return existing.title.localizedCaseInsensitiveCompare(trimmedName) == .orderedSame
-        }
-    }
-
-    private var nameFieldState: TextFieldState {
-        isDuplicate ? .error(Constants.duplicateError) : .normal
-    }
-
-    private var isDoneButtonActive: Bool {
-        !trimmedName.isEmpty && !amount.isEmpty && !isDuplicate
-    }
+    @State private var observed = Observed()
     
     // MARK: - Body
     
@@ -70,24 +50,24 @@ struct ShoppingItemFormView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(Constants.cancelButton) {
-                        router.dismissModal()
+                        onDismiss()
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(Constants.doneButton) {
-                        onSave(trimmedName, amount, selectedUnit)
+                        onSave(
+                            observed.trimmedName(),
+                            observed.amount,
+                            observed.selectedUnit
+                        )
                     }
                     .fontWeight(.semibold)
-                    .disabled(!isDoneButtonActive)
+                    .disabled(!observed.isDoneButtonActive(existingItems: existingItems, editingItem: item))
                 }
             }
         }
         .onAppear {
-            if let item {
-                name = item.title
-                amount = String(item.amount)
-                selectedUnit = item.type
-            }
+            observed.configure(with: item)
         }
     }
 }
@@ -99,8 +79,8 @@ private extension ShoppingItemFormView {
     var nameField: some View {
         BaseTextField(
             placeholder: Constants.namePlaceholder,
-            text: $name,
-            state: nameFieldState
+            text: $observed.name,
+            state: observed.nameFieldState(existingItems: existingItems, editingItem: item)
         )
     }
     
@@ -112,7 +92,7 @@ private extension ShoppingItemFormView {
     }
     
     var amountField: some View {
-        TextField(Constants.amountPlaceholder, text: $amount)
+        TextField(Constants.amountPlaceholder, text: $observed.amount)
             .font(AppFont.body)
             .foregroundStyle(.grayHintUniversalSL)
             .keyboardType(.decimalPad)
@@ -128,7 +108,7 @@ private extension ShoppingItemFormView {
                 .font(AppFont.body)
                 .foregroundStyle(.grayHintUniversalSL)
             
-            Picker("", selection: $selectedUnit) {
+            Picker("", selection: $observed.selectedUnit) {
                 ForEach(MeasurementType.allCases, id: \.self) { unit in
                     Text(unit.rawValue).tag(unit)
                 }
@@ -152,17 +132,19 @@ private extension ShoppingItemFormView {
         static let namePlaceholder = "Название списка"
         static let amountPlaceholder = "Количество"
         static let unitLabel = "Ед.изм.:"
-        static let duplicateError = "Этот товар уже есть в списке, добавьте другой"
     }
 }
 
 // MARK: - Preview
 
 #Preview("Создание") {
-    ShoppingItemFormView(isEditing: false) { name, amount, unit in
-        print("Создано: \(name), \(amount) \(unit.rawValue)")
-    }
-    .environment(NavigationRouter())
+    ShoppingItemFormView(
+        isEditing: false,
+        onDismiss: {},
+        onSave: { name, amount, unit in
+            print("Создано: \(name), \(amount) \(unit.rawValue)")
+        }
+    )
 }
 
 #Preview("Создание с дубликатом") {
@@ -171,16 +153,20 @@ private extension ShoppingItemFormView {
             ShoppingItem(title: "Чайник", amount: 1, type: .piece),
             ShoppingItem(title: "Молоко", amount: 2, type: .liter)
         ],
-        isEditing: false
-    ) { name, amount, unit in
-        print("Создано: \(name), \(amount) \(unit.rawValue)")
-    }
-    .environment(NavigationRouter())
+        isEditing: false,
+        onDismiss: {},
+        onSave: { name, amount, unit in
+            print("Создано: \(name), \(amount) \(unit.rawValue)")
+        }
+    )
 }
 
 #Preview("Редактирование") {
-    ShoppingItemFormView(isEditing: true) { name, amount, unit in
-        print("Изменено: \(name), \(amount) \(unit.rawValue)")
-    }
-    .environment(NavigationRouter())
+    ShoppingItemFormView(
+        isEditing: true,
+        onDismiss: {},
+        onSave: { name, amount, unit in
+            print("Изменено: \(name), \(amount) \(unit.rawValue)")
+        }
+    )
 }

@@ -120,6 +120,9 @@ private extension AppNavigationView {
         ShoppingItemFormView(
             existingItems: currentShoppingItems,
             isEditing: false,
+            onDismiss: {
+                router.dismissModal()
+            },
             onSave: { name, amount, unit in
                 
                 guard let route = router.path.last else {
@@ -143,7 +146,6 @@ private extension AppNavigationView {
                 router.dismissModal()
             }
         )
-        .environment(router)
     }
     
     private func editShoppingItemModal(item: ShoppingItemEntity) -> some View {
@@ -151,6 +153,9 @@ private extension AppNavigationView {
             item: item.toModel(),
             existingItems: currentShoppingItems,
             isEditing: true,
+            onDismiss: {
+                router.dismissModal()
+            },
             onSave: { name, amount, unit in
                 item.title = name
                 item.amount = Double(amount) ?? 1
@@ -159,7 +164,6 @@ private extension AppNavigationView {
                 router.dismissModal()
             }
         )
-        .environment(router)
     }
 
     private var currentShoppingItems: [ShoppingItem] {
