@@ -75,7 +75,6 @@ private extension ShoppingItemOptionsMenu {
             onSortTap()
             isPresented = false
         }
-        .padding(.leading, 31)
     }
 
     var shareRow: some View {
@@ -88,7 +87,6 @@ private extension ShoppingItemOptionsMenu {
             onShareTap()
             isPresented = false
         }
-        .padding(.leading, 31)
     }
 
     var resetRow: some View {
@@ -101,7 +99,6 @@ private extension ShoppingItemOptionsMenu {
             // TODO: реализовать после добавления бизнес-логики
             isPresented = false
         }
-        .padding(.leading, 31)
     }
 
     var deleteCompletedRow: some View {
@@ -109,13 +106,12 @@ private extension ShoppingItemOptionsMenu {
             title: MenuTitle.deleteCompleted,
             rightIcon: AppIcon.trashSL.image,
             isMultiline: true,
-            titleFont: AppFont.body
+            titleFont: AppFont.body,
+            color: .redSL,
         ) {
             // TODO: реализовать после добавления бизнес-логики
             isPresented = false
         }
-        .padding(.leading, 31)
-        .foregroundStyle(.red)
     }
 }
 
