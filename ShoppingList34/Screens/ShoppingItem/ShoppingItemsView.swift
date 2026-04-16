@@ -15,6 +15,16 @@ struct ShoppingItemsView: View {
         entity.items.map { $0.toModel() }
     }
     
+    var filteredItems: [ShoppingItem] {
+        if searchText.trimmingCharacters(in: .whitespaces).isEmpty {
+            return shoppingItems
+        }
+        
+        return shoppingItems.filter {
+            $0.title.localizedCaseInsensitiveContains(searchText)
+        }
+    }
+    
     var title: String {
         entity.toModel().title
     }
@@ -42,9 +52,6 @@ struct ShoppingItemsView: View {
         .background(.grayMainBackgroundSL)
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
-        .onAppear {
-            print("MODEL CONTEXT:", entity.modelContext as Any)
-        }
     }
 }
 
@@ -90,7 +97,7 @@ private extension ShoppingItemsView {
     
     var itemsList: some View {
         List {
-            ForEach(shoppingItems) { item in
+            ForEach(filteredItems) { item in
                 shoppingItemRow(for: item)
                     .listRowInsets(EdgeInsets())
                     .listRowBackground(Color.clear)
