@@ -102,12 +102,4 @@ private extension ListCreationView.Observed {
     var trimmedTitle: String {
         title.trimmingCharacters(in: .whitespacesAndNewlines)
     }
-    
-    func handleCreateList(onCreateTap: () -> Void) {
-        onCreateTap()
-    }
-    
-    func handleSaveList(onSaveTap: () -> Void) {
-        onSaveTap()
-    }
 }

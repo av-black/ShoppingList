@@ -12,21 +12,17 @@ struct ListView: View {
     @Query
     private var entities: [ListItemEntity]
     private var sortedEntities: [ListItemEntity] {
-        entities.sorted {
-            isSortedAscending
-            ? $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending
-            : $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedDescending
-        }
+        observed.sortedEntities(from: entities)
     }
-    @Environment(NavigationRouter.self)
-    private var router
+    
     @Environment(\.modelContext)
     private var context
-    @State private var isSortedAscending = true
+    @State private var observed = Observed()
     @State private var activeAlert: ListViewAlert?
     
     let onCreateTap: () -> Void
     let onItemTap: (ListItemEntity) -> Void
+    let onEditTap: (ListCreationModel) -> Void
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -107,7 +103,7 @@ private extension ListView {
     }
     
     func handleSortTap() {
-        isSortedAscending.toggle()
+        observed.toggleSort()
     }
     
     func deleteAction(for entity: ListItemEntity) -> some View {
@@ -161,28 +157,16 @@ private extension ListView {
     }
     
     func handleDelete(_ entity: ListItemEntity) {
-        context.delete(entity)
+        observed.delete(entity, context: context)
     }
     
     func handleEdit(_ entity: ListItemEntity) {
-        let model = entity.toModel()
-        
-        router.push(
-            .listCreationScreen(
-                mode: .edit(
-                    id: model.id,
-                    title: model.title,
-                    selectedColor: model.designColor,
-                    selectedCategory: CategoryItem(icon: model.icon)
-                )
-            )
-        )
+        let mode = observed.makeEditMode(from: entity)
+        onEditTap(mode)
     }
     
     func handleDuplicate(_ entity: ListItemEntity) {
-        let newItem = ListDuplicateHelper.makeCopy(from: entity.toModel(), in: context)
-        
-        context.insert(newItem.toEntity())
+        observed.duplicate(entity, context: context)
     }
 }
 
@@ -233,7 +217,8 @@ private enum ListViewAlert: Identifiable {
 #Preview("Пустой") {
     ListView(
         onCreateTap: {},
-        onItemTap: { _ in }
+        onItemTap: { _ in },
+        onEditTap: { _ in }
     )
     .environment(ThemeStore())
 }
@@ -241,7 +226,8 @@ private enum ListViewAlert: Identifiable {
 #Preview("С данными") {
     ListView(
         onCreateTap: {},
-        onItemTap: { _ in }
+        onItemTap: { _ in },
+        onEditTap: { _ in }
     )
     .modelContainer(PreviewContainer.container)
     .environment(ThemeStore())
