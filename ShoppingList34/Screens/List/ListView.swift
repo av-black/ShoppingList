@@ -13,7 +13,7 @@ struct ListView: View {
     private var entities: [ListItemEntity]
     private var sortedEntities: [ListItemEntity] {
         entities.sorted {
-            isSortedAscending
+            observed.isSortedAscending
             ? $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending
             : $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedDescending
         }
@@ -22,7 +22,7 @@ struct ListView: View {
     private var router
     @Environment(\.modelContext)
     private var context
-    @State private var isSortedAscending = true
+    @State private var observed = Observed()
     @State private var activeAlert: ListViewAlert?
     
     let onCreateTap: () -> Void
@@ -107,7 +107,7 @@ private extension ListView {
     }
     
     func handleSortTap() {
-        isSortedAscending.toggle()
+        observed.toggleSort()
     }
     
     func deleteAction(for entity: ListItemEntity) -> some View {
@@ -161,28 +161,19 @@ private extension ListView {
     }
     
     func handleDelete(_ entity: ListItemEntity) {
-        context.delete(entity)
+        observed.delete(entity, context: context)
     }
     
     func handleEdit(_ entity: ListItemEntity) {
-        let model = entity.toModel()
+        let mode = observed.makeEditMode(from: entity)
         
         router.push(
-            .listCreationScreen(
-                mode: .edit(
-                    id: model.id,
-                    title: model.title,
-                    selectedColor: model.designColor,
-                    selectedCategory: CategoryItem(icon: model.icon)
-                )
+                .listCreationScreen(mode: mode)
             )
-        )
     }
     
     func handleDuplicate(_ entity: ListItemEntity) {
-        let newItem = ListDuplicateHelper.makeCopy(from: entity.toModel(), in: context)
-        
-        context.insert(newItem.toEntity())
+        observed.duplicate(entity, context: context)
     }
 }
 
