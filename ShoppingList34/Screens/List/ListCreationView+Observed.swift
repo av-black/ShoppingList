@@ -32,12 +32,16 @@ extension ListCreationView {
                 title = ""
                 selectedColor = .blue
                 selectedCategory = items.first ?? CategoryItem(icon: .cart)
-
+                
             case let .edit(id, title, selectedColor, selectedCategory):
                 self.id = id
                 self.title = title
                 self.selectedColor = selectedColor
-                self.selectedCategory = selectedCategory
+                
+                self.selectedCategory =
+                items.first(where: { $0.icon == selectedCategory.icon })
+                ?? items.first
+                ?? CategoryItem(icon: .cart)
             }
         }
         
